@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
 
 import { DefaultText, HeaderText } from "../../controllers/TextController";
@@ -15,14 +15,16 @@ const Goals = ({ navigation }) => {
     return(
         <ScrollView>
         <View style={styles.screen}>
-            <View style={styles.setGoals}>
-                <View style={styles.goalsHeaderContainer}>
+            <View style={styles.contentContainer}>
+                <View style={{...styles.headerContainer}}>
                     <HeaderText>GOALS</HeaderText>
                     <DefaultText>What do you want to become?</DefaultText>
                     <DefaultText>Set big goals!</DefaultText>
                 </View>
                 <View style={styles.goalsContainer}>
-                    <DefaultText style={styles.goalList}>Sample</DefaultText>
+                    <View style={styles.goalList}>
+                        <DefaultText>Sample</DefaultText>
+                    </View>
                     <View style={styles.addAGoalButton}>
                         <Touchable onPress={addAGoalHandler}>
                             <View style={styles.addAGoalContainer}>
@@ -32,54 +34,61 @@ const Goals = ({ navigation }) => {
                         </Touchable>
                     </View>
                 </View>
-                <View style={styles.emptyContainerForAllignment}></View>
+            </View>
+
+            <View style={styles.contentContainer}>
+                <View style={styles.headerContainer}>
+                    <HeaderText>Completed</HeaderText>
+                    <DefaultText>These are your completed goals.</DefaultText>
+                    <DefaultText>Be proud!</DefaultText>
+                </View>
             </View>
         </View>
         </ScrollView>
     );
 };
 
+//Style Constants
+const listHeight = 40;
+
 const styles = StyleSheet.create({
     screen: {
         //empty
     },
-    setGoals: {
+    contentContainer: {
         alignItems: "center",
-        justifyContent: "space-between",
-        borderWidth: 1,
-        minHeight: "40%",
+        //borderWidth: 1,
     },
-    goalsHeaderContainer: {
+    headerContainer: {
         justifyContent: "center",
         alignItems: "center",
         height: 70,
     },
-    addAGoalButton: {
-        width: 110, 
-        height: 35, 
-        borderRadius: 17.5, 
-        overflow: "hidden", 
-        alignItems: "center", 
+    goalsContainer: {
+        //borderWidth: 1,
+        marginVertical: 20,
         justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+    },
+    addAGoalButton: { 
+        height: listHeight, 
+        width: "100%",
     },
     addAGoalContainer: {
         flexDirection: "row",
-        justifyContent: "space-around",
         alignItems: "center",
+        justifyContent: "center",
         width: "100%",
         height: "100%",
     },
-    goalsContainer: {
+    goalList: {
+        height: listHeight,
+        width: "100%",
         justifyContent: "center",
         alignItems: "center",
+        //borderWidth: 1,
     },
-    goalList: {
-        marginVertical: 15,
-    },
-    emptyContainerForAllignment: {
-        height: 35,
-        borderWidth: 1,
-    }
 });
 
 export default Goals;
