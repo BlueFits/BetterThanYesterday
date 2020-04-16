@@ -1,13 +1,18 @@
-import React from "react";
-import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Ionicons } from "@expo/vector-icons"
+import React, { useEffect } from "react";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 import { DefaultText, HeaderText } from "../../controllers/TextController";
 
 import Touchable from "../../components/Touchable";
 
-const Goals = ({ navigation }) => {
+const Goals = ({ navigation, route }) => {
 
+    //Initialize Variables
+    const userGoals = useSelector(state => state.userReducer.goals);
+    
+    //Methods  
     function addAGoalHandler() {
         navigation.navigate("Add Goal");
     };
@@ -22,9 +27,13 @@ const Goals = ({ navigation }) => {
                     <DefaultText>Set big goals!</DefaultText>
                 </View>
                 <View style={styles.goalsContainer}>
-                    <View style={styles.goalList}>
-                        <DefaultText>Sample</DefaultText>
-                    </View>
+                        {userGoals.map((goal, index) => {
+                            return (
+                            <View key={"key:"+index} style={styles.goalList}>
+                                <DefaultText>{goal.goalName}</DefaultText>
+                            </View>
+                            );
+                        })}
                     <View style={styles.addAGoalButton}>
                         <Touchable onPress={addAGoalHandler}>
                             <View style={styles.addAGoalContainer}>

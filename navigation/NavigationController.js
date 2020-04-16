@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons, Foundation } from "@expo/vector-icons"
+import { Ionicons, Foundation } from "@expo/vector-icons";
 
 //Constants
 import Colors from "../constants/Colors";
@@ -10,8 +10,6 @@ import Colors from "../constants/Colors";
 import HomeStackNavigator from "./stacks/HomeStackNavigator";
 import GoalsStackNavigator from "./stacks/GoalsStackNavigator";
 
-//Screens
-import AddGoal from "../screens/goals/AddGoal";
 //Initialized Variables
 const Tab = createBottomTabNavigator();
 
@@ -41,6 +39,7 @@ const TabNavigator = () => {
 
 const defaultConfig = {
     activeTintColor: Colors.primary,
+    keyboardHidesTabBar: true,
 };
 
 //export main navigation method
