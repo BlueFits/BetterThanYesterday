@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 
 //Controller
-import { DefaultText, HeaderText } from "../controllers/TextController";
+import { DefaultText, HeaderText } from "../../../controllers/TextController";
 
 
 const TaskReviewer = (props) => {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as Font from "expo-font";
 import { AppLoading } from "expo";
 import { enableScreens } from "react-native-screens";
+import { MenuProvider } from "react-native-popup-menu";
 
 //React-Redux Setup
 import { createStore, combineReducers } from "redux";
@@ -25,6 +26,7 @@ function fetchFonts() {
   return Font.loadAsync({
     "myriad": require("./assets/fonts/Myriad-Pro-Regular.ttf"),
     "myriadBold": require("./assets/fonts/Myriad-Pro-Bold.ttf"),
+    "myriadBoldItalic": require("./assets/fonts/Myriad-Pro-Bold-Italic.ttf"),
     "myriadSemiBold": require("./assets/fonts/Myriad-Pro-Semibold.ttf"),
     "myriadItalic": require("./assets/fonts/Myriad-Pro-Italic.ttf"),
   });
@@ -39,7 +41,9 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <NavigationController />
+        <MenuProvider>
+          <NavigationController />
+        </MenuProvider>
       </Provider>
     );
   }

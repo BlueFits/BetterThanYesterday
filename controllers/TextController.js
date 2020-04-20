@@ -13,15 +13,47 @@ export const DefaultTextBold = (props) => {
     );
 };
 
+export const DefaultTextItalic = (props) => {
+    return(
+        <Text style={{fontFamily: "myriadItalic", ...styles.defaultText, ...props.style}}>{props.children}</Text>
+    );
+};
+
+
 export const HeaderText = (props) => {
     return(
         <Text style={{fontFamily: "myriadBold", ...styles.headerText, ...props.style}}>{props.children}</Text>
     );
 };
 
+export const HeaderTextItalic = (props) => {
+    return(
+        <Text style={{fontFamily: "myriadBoldItalic", ...styles.headerText, ...props.style, fontSize: 20, }}>{props.children}</Text>
+    );
+};
+
+export const Header2Text = (props) => {
+    return(
+        <Text style={{fontFamily: "myriadBold", ...styles.header2Text, ...props.style}}>{props.children}</Text>
+    );
+};
+
+export const Header2TextItalic = (props) => {
+    return(
+        <Text style={{fontFamily: "myriadBoldItalic", ...styles.header2Text, ...props.style}}>{props.children}</Text>
+    );
+};
+
+
 export const SmallText = (props) => {
     return(
         <Text style={{fontFamily: "myriad", ...styles.smallText, ...props.style}}>{props.children}</Text>
+    );
+};
+
+export const SmallTextItalic = (props) => {
+    return(
+        <Text style={{fontFamily: "myriadItalic", ...styles.smallText, ...props.style}}>{props.children}</Text>
     );
 };
 
@@ -36,5 +68,8 @@ const styles = StyleSheet.create({
     },
     headerText: {
         fontSize: 21,
+    },
+    header2Text: {
+        fontSize: 18,
     },
 });

@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 
 //Components
-import TaskReviewer from "../../components/TaskReviewer";
+import TaskReviewer from "../../components/local/home/TaskReviewer";
 
 const Home = ({ route }) => {
     let { headerValue } = route.params;

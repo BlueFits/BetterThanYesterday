@@ -1,6 +1,6 @@
 import User from "../models/user";
 import Goal from "../models/goal";
-import Task from "../models/task";
+import Step from "../models/step";
 
 const USERS = [
     new User(
@@ -11,8 +11,11 @@ const USERS = [
                 "goalId1", 
                 "Entrepeneur",
                 [
-                    new Task("taskId1", "Active Ideation", ["Brainstorm in the morning"]),
-                ] 
+                    new Step("taskId1", "Active Ideation", false, ["Brainstorm in the morning"]),
+                    new Step("taskId2", "Sumn", false, ["Brainstorm in the morning"]),
+                ],
+                 "on-going",
+                 "Aug 22, 2019",
             ),
         ],
     ),

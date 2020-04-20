@@ -1,7 +1,9 @@
 export default class Goal {
-    constructor(id, goalName, tasksArrayOfObjects) {
+    constructor(id, goalName, stepsArrayOfObjects, status, startDate ) {
         this.id = id;
         this.goalName = goalName;
-        this.tasksArrayOfObjects = tasksArrayOfObjects;
+        this.stepsArrayOfObjects = stepsArrayOfObjects;
+        this.status = status.toLowerCase();
+        this.startDate = startDate;
     }
 };

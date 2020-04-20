@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
 //Redux Actions
-import { updateGoals } from "../../store/actions/user";
+import { addGoal } from "../../store/actions/user";
 
 //Controllers
 import { DefaultText, SmallText } from "../../controllers/TextController";
@@ -22,7 +22,7 @@ const AddGoal = ({ navigation }) => {
     const [errors, setErrors] = useState([]);
 
     //Initiatize Logged in User
-    const user = useSelector(state => state.userReducer.user);
+    const userGoals = useSelector(state => state.userReducer.goals);
     const dispatch = useDispatch();
 
     //Initialize Variables
@@ -43,8 +43,8 @@ const AddGoal = ({ navigation }) => {
             .map(word => word.charAt(0).toUpperCase() + word.substring(1))
             .join(" ");
             //Pass data into redux
-            dispatch(updateGoals(validatedText));
-            navigation.navigate("Edit Goal");
+            dispatch(addGoal(validatedText));
+            navigation.navigate("Edit Goal", { goalNameFromAddPage: validatedText });
         }
     };
 
