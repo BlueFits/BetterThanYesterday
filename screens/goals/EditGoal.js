@@ -138,7 +138,7 @@ const EditGoal = ({ navigation, route }) => {
         ),
         headerRight: () => {
             return(
-                <Menu>
+                <Menu style={styles.headerRightMenu}>
                     <MenuTrigger style={styles.headerRightMenuTriggerStyle}>
                         <HeaderButtons HeaderButtonComponent={OptionsHeaderButton}>
                             <Item 

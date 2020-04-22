@@ -3,6 +3,8 @@ export const UPDATE_GOAL = "UPDATE_GOAL";
 export const UDPATE_STEP = "UPDATE_STEP";
 export const ADD_STEP = "ADD_STEP";
 
+//This is what we are sending in a server
+
 export const addGoal = (goal) => {
     return {
         type: ADD_GOAL,
