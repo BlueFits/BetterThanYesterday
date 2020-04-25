@@ -25,14 +25,29 @@ export default function(state = initialState, action) {
                     [],
                     "On-going", 
                     moment().format("MMMM Do YYYY"),
+                    action.selectedColor,//Change
                     )),
+                    
             };
             return update;
         case UPDATE_GOAL:
             const updateGoalSnapshot = [...state.goals];
             const updateGoalIndex = updateGoalSnapshot.findIndex(goal => goal.id === action.goalId);
-            updateGoalSnapshot[updateGoalIndex] = {...updateGoalSnapshot[updateGoalIndex], status: "completed"};
-            return { ...state, goals: updateGoalSnapshot };
+
+            if (action.updateAction === "setCompleted") {
+                updateGoalSnapshot[updateGoalIndex] = {...updateGoalSnapshot[updateGoalIndex], status: "completed"};
+                return { ...state, goals: updateGoalSnapshot };
+            }
+            else if (action.updateAction === "renameGoal") {
+                updateGoalSnapshot[updateGoalIndex] = {...updateGoalSnapshot[updateGoalIndex], goalName: action.updateValue};
+                return {...state, goals: updateGoalSnapshot};
+            }
+
+            else if (action.updateAction === "deleteGoal") {
+                updateGoalSnapshot.splice(updateGoalIndex, 1);
+                return {...state, goals: updateGoalSnapshot};
+            }
+
         case UDPATE_STEP:            
             //Identifiers Problem this mutates the original
             const updateStepGoalsSnapshot = [...state.goals];

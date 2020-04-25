@@ -5,17 +5,20 @@ export const ADD_STEP = "ADD_STEP";
 
 //This is what we are sending in a server
 
-export const addGoal = (goal) => {
+export const addGoal = (goal, selectedColor) => {
     return {
         type: ADD_GOAL,
         goal,
+        selectedColor,
     };
 };
 
-export const updateGoal = (goalId) => {
+export const updateGoal = (goalId, updateAction, updateValue) => {
     return {
         type: UPDATE_GOAL,
         goalId,
+        updateAction,
+        updateValue,
     };
 };
 

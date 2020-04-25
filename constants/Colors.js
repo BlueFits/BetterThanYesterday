@@ -4,4 +4,5 @@ export default {
     accentB: "#5c3e84",
     accentC:"#686ee2",
     grey: "#a0a0a0",
+    lightgrey: "#eaeaea",
 };

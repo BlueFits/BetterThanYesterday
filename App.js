@@ -7,7 +7,9 @@ import { MenuProvider } from "react-native-popup-menu";
 //React-Redux Setup
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
+//Reducers
 import userReducer from "./store/reducers/user";
+import goalsNavigationReducer from "./store/reducers/navigation/goalNavigation";
 
 //Navigation
 import NavigationController from "./navigation/NavigationController";
@@ -17,7 +19,8 @@ enableScreens();
 
 //Initialize React-Redux
 const rootReducer = combineReducers({
-  userReducer
+  userReducer,
+  goalsNavigationReducer,
 });
 const store = createStore(rootReducer);
 

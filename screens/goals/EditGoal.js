@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-} from 'react-native-popup-menu';
 
 //Model Import
 import StepModel from "../../models/step";
@@ -16,10 +10,14 @@ import StepModel from "../../models/step";
 //Custom Components
 import Step from "../../components/local/goals/EditGoalStep";
 import CSteps from "../../components/local/goals/CompletedSteps";
+import EditGoalMenu from "../../components/local/goals/EditGoalMenu";
+import Dialog from "../../components/Dialog";
+
+//Custom Functions
+import { capitalizeWords } from "../../customFunctions/Validators";
 
 //Header Custom Component
 import CustomBackButton from "../../components/HeaderButtonDark";
-import OptionsHeaderButton from "../../components/HeaderButtonDarkSimpleLineIcons";
 
 //Controllers
 import { DefaultText, SmallText, HeaderText, SmallTextItalic } from "../../controllers/TextController";
@@ -46,6 +44,7 @@ const EditGoal = ({ navigation, route }) => {
     const [completedSteps, setCompletedSteps] = useState(stepFilter(stepsArrayOfObjects, "completed"));
     const [addAStepText, setAddAStepText] = useState(null);
     const [stepIsValid, setStepIsValid] = useState(null);
+    const [dialogIsVisible, setDialogIsVisible] = useState(false);
 
     //Methods
     //Filter for stepArray
@@ -73,13 +72,17 @@ const EditGoal = ({ navigation, route }) => {
     };
 
     function markAsCompletedHandler() {
-        dispatch(updateGoal(id));
+        dispatch(updateGoal(id, "setCompleted"));
         navigation.popToTop();
     };
-    
-    function renameGoalHandler() {
-        //Use Menu Slide
-        alert();
+    //BUG: Renaming Does not work wehn it is coming from add page, change the way it navigates
+    function renameGoalHandler(text) {
+        if ((text === null) || (text.trim().length === 0)) {
+            setDialogIsVisible(false);
+        } else {
+            setDialogIsVisible(false);
+            dispatch(updateGoal(id, "renameGoal", capitalizeWords(text)));
+        }
     };
 
     function deleteStepHandler(goalName, stepId, stepIndex, updateAction) {
@@ -138,34 +141,25 @@ const EditGoal = ({ navigation, route }) => {
         ),
         headerRight: () => {
             return(
-                <Menu style={styles.headerRightMenu}>
-                    <MenuTrigger style={styles.headerRightMenuTriggerStyle}>
-                        <HeaderButtons HeaderButtonComponent={OptionsHeaderButton}>
-                            <Item 
-                                title="OPTIONS" 
-                                iconName="options-vertical"
-                            />
-                        </HeaderButtons>
-                    </MenuTrigger>
-                        <MenuOptions>
-                            <MenuOption onSelect={markAsCompletedHandler} value={"Mark as completed"}>
-                                <DefaultText style={styles.menuOptionText}>Mark as completed</DefaultText>
-                            </MenuOption>
-                            <MenuOption onSelect={renameGoalHandler}>
-                                <DefaultText style={styles.menuOptionText}>Rename</DefaultText>
-                            </MenuOption>
-                            <MenuOption value={2}>
-                                <DefaultText style={styles.menuOptionText}>Delete</DefaultText>
-                            </MenuOption>
-                        </MenuOptions>
-                </Menu>
+                <EditGoalMenu 
+                    markAsCompleted={markAsCompletedHandler} 
+                    renameGoal={() => setDialogIsVisible(true)}
+                />
             );
         },
     });
     
-    return(
+    return(        
         <TouchableWithoutFeedback touchSoundDisabled={true} onPress={() => Keyboard.dismiss()}>
         <View style={styles.screen}>
+        <Dialog 
+            title="Rename goal"
+            labelRight="Rename"
+            labelLeft="Cancel"
+            labelLeftHandler={() => setDialogIsVisible(false)} 
+            labelRightHandler={renameGoalHandler} 
+            visibility={dialogIsVisible}
+        />
             <View style={styles.header}>
                 <View style={styles.goalContainer}>
                     <SmallText>Goal:</SmallText>
@@ -233,27 +227,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         flex: 1,
     },
-    headerRightMenu: { 
-        justifyContent: "center", 
-        alignItems: "center", 
-        height: 50, 
-        width: 50, 
-        borderRadius: 25, 
-        overflow: "hidden", 
-    },
-    headerRightMenuTriggerStyle: { 
-        height: "100%", 
-        width: "100%", 
-        justifyContent: "center", 
-        alignItems: "center", 
-    },
-    menuOptionText: {
-        padding: 5,
-    },
     header: {
         flexDirection: "row",
         height: 80,
-        //alignItems: 'center', 
     },
     pageDescription: {
         paddingVertical: 10,

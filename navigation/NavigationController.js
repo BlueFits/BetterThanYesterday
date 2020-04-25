@@ -3,6 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, Foundation } from "@expo/vector-icons";
 
+//Screens
+import Filler from "../screens/filler";
+
 //Constants
 import Colors from "../constants/Colors";
 
@@ -27,7 +30,7 @@ const TabNavigator = () => {
                         return <Foundation name="target" size={28} color={tabInfo.color}/> 
                     },
                 }}/>
-                <Tab.Screen name="Insights" component={HomeStackNavigator} options={{
+                <Tab.Screen name="Insights" component={Filler} options={{
                     tabBarIcon: (tabInfo) => {
                         return <Foundation name="graph-bar" size={28} color={tabInfo.color}/> 
                     },

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, FlatList, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { View, StyleSheet, TextInput, FlatList, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import ColorPalette from "react-native-color-palette";
 //Redux Actions
 import { addGoal } from "../../store/actions/user";
 
@@ -13,24 +13,27 @@ import { DefaultText, SmallText } from "../../controllers/TextController";
 //Constants
 import GoalSuggestions from "../../constants/GoalSuggestions";
 
+//Custom Functions
+import { capitalizeWords } from "../../customFunctions/Validators";
+
 //Header Config
 import HeaderButton from "../../components/HeaderButton";
 
 const AddGoal = ({ navigation }) => {
+    const [selectedColor, setSelectedColor] = useState("#2ecc71");
     const [goal, setGoal] = useState(null);
     const [goalIsValid, setGoalIsValid] = useState(null);
     const [errors, setErrors] = useState([]);
 
-    //Initiatize Logged in User
-    const userGoals = useSelector(state => state.userReducer.goals);
+    //Initiatize variables
     const dispatch = useDispatch();
 
-    //Initialize Variables
-    //Empty
     //Methods
     function suggestionsRenderHandler(data) {
         return(
-            <DefaultText style={styles.flatListItems}>{data.item}</DefaultText>
+            <TouchableOpacity onPress={goalSuggestionsHandler.bind(this, data)}>
+                <DefaultText style={styles.flatListItems}>{data.item}</DefaultText>
+            </TouchableOpacity>
         );
     };
 
@@ -39,11 +42,9 @@ const AddGoal = ({ navigation }) => {
             setErrors(["Please put a goal or choose from the list below."]);
         } else {
             //Extra Validation
-            const validatedText = goal.split(" ")
-            .map(word => word.charAt(0).toUpperCase() + word.substring(1))
-            .join(" ");
+            const validatedText = capitalizeWords(goal);
             //Pass data into redux
-            dispatch(addGoal(validatedText));
+            dispatch(addGoal(validatedText, selectedColor));
             navigation.navigate("Edit Goal", { goalNameFromAddPage: validatedText });
         }
     };
@@ -53,6 +54,11 @@ const AddGoal = ({ navigation }) => {
         //Check if goal input is empty
         text.trim().length === 0 ? setGoalIsValid(false) : setGoalIsValid(true);
         setGoal(text);
+    };
+
+    function goalSuggestionsHandler(data) {
+        setGoal(data.item);
+        setGoalIsValid(true);
     };
 
     //Page Specific Nav Settings
@@ -83,6 +89,18 @@ const AddGoal = ({ navigation }) => {
                         onSubmitEditing={submitHandler}
                     />
                     <SmallText style={styles.errorText}>{errors}</SmallText>
+                </View>
+
+                <View style={styles.colorPaletteContainer}>
+                    <ColorPalette 
+                        onChange={color => setSelectedColor(color)}
+                        value={selectedColor}
+                        colors={["#2ecc71","#1abc9c","#3498db","#9b59b6","#34495e","#e67e22"]} 
+                        title={"Choose a color to identify this goal with"}
+                        titleStyles={{ color: "#fff" }}
+                        icon={<Ionicons name="ios-checkmark" size={23} color="#fff" />}
+                        scaleToWindow={true}
+                    />
                 </View>
 
                 <View style={styles.suggestionContainer}>
@@ -129,6 +147,10 @@ const styles = StyleSheet.create({
     errorText: {
         padding: headerChildrenPadding,
         color: "#e74c3c",
+    },
+    colorPaletteContainer: {
+        justifyContent: "center",
+        alignItems: "center",
     },
     suggestionContainer: {
         alignItems: "center",

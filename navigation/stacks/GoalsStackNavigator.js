@@ -7,17 +7,19 @@ import Colors from "../../constants/Colors";
 //Initialize Vars
 const Stack = createStackNavigator();
 
+//Tab Navigators
+import GoalsTopTabNavigator from "../topTab/GoalsTopTabNavigator";
+
 //Screens
-import GoalsScreen from "../../screens/goals/Goals";
 import AddGoalScreen from "../../screens/goals/AddGoal";
 import EditGoal from "../../screens/goals/EditGoal";
 
 const GoalsStackNavigator = () => {
     return(
         <Stack.Navigator  screenOptions={defaultScreenOptions}>
-            <Stack.Screen name="Goals" component={GoalsScreen} options={{
-                headerShown: true,
-            }} />
+            <Stack.Screen name="Goals" component={GoalsTopTabNavigator} options={{
+                headerStatusBarHeight: -30,
+            }}/>
             <Stack.Screen name="Add Goal" component={AddGoalScreen} options={{
                 headerTintColor: "#fff",
                 cardStyle: {
@@ -28,6 +30,12 @@ const GoalsStackNavigator = () => {
         </Stack.Navigator>
     );
 };
+
+/* 
+<Stack.Screen name="Goals" component={GoalsScreen} options={{
+    headerShown: true,
+}} />
+*/
 
 const defaultScreenOptions= {
     headerStyle: {
