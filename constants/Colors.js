@@ -5,4 +5,6 @@ export default {
     accentC:"#686ee2",
     grey: "#a0a0a0",
     lightgrey: "#eaeaea",
+    lightGreyOutline: "#dbdbdb",
+    green: "#2ecc71",
 };

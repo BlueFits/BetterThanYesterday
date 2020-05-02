@@ -17,7 +17,7 @@ const EditGoalStep = ({ title, deleteStep, completeStep }) => {
         </View>
     );
 };
-
+//Bug if Header Text is too long
 const styles = StyleSheet.create({
     step: {
         paddingVertical: 20,

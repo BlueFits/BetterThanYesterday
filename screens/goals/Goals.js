@@ -71,6 +71,7 @@ const Goals = ({ navigation }) => {
                         return (
                             <Swipeable 
                                 key={"GoalKey:"+index}
+                                
                                 rightActionActivationDistance={250}
                                 onRightActionRelease={deleteGoalHandler.bind(this, goal.id)}
                                 rightButtons={[

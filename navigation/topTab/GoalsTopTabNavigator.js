@@ -2,7 +2,7 @@ import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../constants/Colors";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 //Reducers
 import { switchTab } from "../../store/actions/navigation/goalNavigation";
 //Screens

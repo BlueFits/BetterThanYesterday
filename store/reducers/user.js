@@ -1,10 +1,11 @@
 import USERS from "../../data/dumy-data";
-import { ADD_GOAL, UPDATE_GOAL, UDPATE_STEP, ADD_STEP } from "../actions/user";
+import { ADD_GOAL, UPDATE_GOAL, UDPATE_STEP, ADD_STEP, UPDATE_TASK } from "../actions/user";
 import moment from "moment";
 
 //model for dummy data
 import Goal from "../../models/goal";
 import Step from "../../models/step";
+import Task from "../../models/task";
 
 const loggedInUser = USERS.filter(user => user.username === "user1" )[0];
 
@@ -70,6 +71,25 @@ export default function(state = initialState, action) {
             const addStepGoalIndex = addStepGoalsSnaphot.findIndex(goal => goal.id === action.goalId);
             addStepGoalsSnaphot[addStepGoalIndex].stepsArrayOfObjects.push(new Step("stepId"+stepToAdd.replace(/\s/g,""), stepToAdd, false, []));
             return { ...state, goals: addStepGoalsSnaphot };
+        case UPDATE_TASK:
+            //Think about opting for a non mutating making use of {{...something, addSomething}}
+            const updateTaskSnap = [...state.goals];
+            const updateTaskGoalIndex = updateTaskSnap.findIndex(goal => goal.id === action.goalId);
+            const updateTaskSelectedGoal = updateTaskSnap[updateTaskGoalIndex];
+            const updateTaskStepIndex = updateTaskSelectedGoal.stepsArrayOfObjects.findIndex(step => step.id === action.stepId);
+            const updateTaskSelectedStep = updateTaskSelectedGoal.stepsArrayOfObjects[updateTaskStepIndex];
+            const taskIndex = updateTaskSelectedStep.tasks.findIndex(task => task.taskDate === action.currentDate);
+            if (taskIndex >= 0) {
+                //just update
+                updateTaskSelectedStep.tasks[taskIndex].tasksList.push(action.task);
+                return { ...state, goals: updateTaskSnap };
+            } else {
+                //create new task
+                updateTaskSelectedStep.tasks.push(new Task(`taskIdFor:${action.task}`, action.currentDate, [action.task]));
+                return { ...state, goals: updateTaskSnap };
+            }
+
+            return state;
         default:
             return state;
     };

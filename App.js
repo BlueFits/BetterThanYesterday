@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 //Reducers
 import userReducer from "./store/reducers/user";
 import goalsNavigationReducer from "./store/reducers/navigation/goalNavigation";
+import homeNavigationReducer from "./store/reducers/navigation/homeNavigation";
 
 //Navigation
 import NavigationController from "./navigation/NavigationController";
@@ -21,6 +22,7 @@ enableScreens();
 const rootReducer = combineReducers({
   userReducer,
   goalsNavigationReducer,
+  homeNavigationReducer,
 });
 const store = createStore(rootReducer);
 
@@ -34,6 +36,17 @@ function fetchFonts() {
     "myriadItalic": require("./assets/fonts/Myriad-Pro-Italic.ttf"),
   });
 };
+
+console.log(`
+  -----Bug Report-----
+  -Edit Goals 2
+  --deleting a step bug
+  --stepname is too long
+  -Home
+  --page update is too slow//Try putting the render in a state
+  --stack header at add Task is too long
+  --Long current indicator Text
+`);
 
 //Main Component
 export default function App() { 

@@ -20,11 +20,15 @@ const TabNavigator = () => {
     return (
         <NavigationContainer>
             <Tab.Navigator tabBarOptions={defaultConfig}>
-                <Tab.Screen name="Home" component={HomeStackNavigator} options={{
-                    tabBarIcon: (tabInfo) => {
-                        return <Ionicons name="md-home" size={28} color={tabInfo.color}/> 
-                    },
-                }}/>
+                <Tab.Screen 
+                    name="Home" 
+                    component={HomeStackNavigator} 
+                    options={{
+                        tabBarIcon: (tabInfo) => {
+                            return <Ionicons name="md-home" size={28} color={tabInfo.color}/> 
+                        },
+                    }}
+                />
                 <Tab.Screen name="Goals" component={GoalsStackNavigator} options={{
                     tabBarIcon: (tabInfo) => {
                         return <Foundation name="target" size={28} color={tabInfo.color}/> 

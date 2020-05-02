@@ -1,6 +1,8 @@
 import User from "../models/user";
 import Goal from "../models/goal";
 import Step from "../models/step";
+import Task from "../models/task";
+import moment from "moment";
 
 const USERS = [
     new User(
@@ -11,8 +13,13 @@ const USERS = [
                 "goalId1", 
                 "Entrepeneur",
                 [
-                    new Step("taskId1", "Active Ideation", false, ["Brainstorm in the morning"]),
-                    new Step("taskId2", "Sumn", false, ["Brainstorm in the morning"]),
+                    new Step("stepId1", "Active Ideation", false, [
+                        new Task(
+                            "taskId1",
+                            moment().subtract(1,"d").format("MMMM Do YYYY"),
+                            ["something here"]
+                        ),
+                    ]),
                 ],
                  "on-going",
                  "Aug 22, 2019",
@@ -21,9 +28,7 @@ const USERS = [
             new Goal(
                 "goalId2", 
                 "Super-Fit",
-                [
-                    new Step("taskId1", "Work out", false, ["Eat good"]),
-                ],
+                [],
                  "on-going",
                  "Aug 22, 2019",
                  "#2ecc71"

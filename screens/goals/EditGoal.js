@@ -75,7 +75,7 @@ const EditGoal = ({ navigation, route }) => {
         dispatch(updateGoal(id, "setCompleted"));
         navigation.popToTop();
     };
-    //BUG: Renaming Does not work wehn it is coming from add page, change the way it navigates
+    //BUG: Renaming Does not work when it is coming from add page, change the way it navigates
     function renameGoalHandler(text) {
         if ((text === null) || (text.trim().length === 0)) {
             setDialogIsVisible(false);
@@ -84,7 +84,7 @@ const EditGoal = ({ navigation, route }) => {
             dispatch(updateGoal(id, "renameGoal", capitalizeWords(text)));
         }
     };
-
+    //BUG: deleting step after adding into TaskList in home causes a crash
     function deleteStepHandler(goalName, stepId, stepIndex, updateAction) {
         const stepSnapShot = [...steps];
         stepSnapShot.splice(stepIndex, 1);
