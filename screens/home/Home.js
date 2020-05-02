@@ -171,6 +171,7 @@ const Home = ({ navigation }) => {
                     homeGoals={homeGoals}
                     header={homeState.header}
                     quickAddVisibility={true}
+                    navigation={navigation}
                 />
                 <Footer 
                     homeState={homeState}
@@ -182,6 +183,7 @@ const Home = ({ navigation }) => {
                     homeGoals={homeGoals}
                     header={homeState.header2}
                     quickAddVisibility={false}
+                    navigation={navigation}
                 />
             </ScrollView>               
             <View style={styles.addButtonContainer}>

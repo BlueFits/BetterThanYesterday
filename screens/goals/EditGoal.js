@@ -84,7 +84,7 @@ const EditGoal = ({ navigation, route }) => {
             dispatch(updateGoal(id, "renameGoal", capitalizeWords(text)));
         }
     };
-    //BUG: deleting step after adding into TaskList in home causes a crash
+    
     function deleteStepHandler(goalName, stepId, stepIndex, updateAction) {
         const stepSnapShot = [...steps];
         stepSnapShot.splice(stepIndex, 1);

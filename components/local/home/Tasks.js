@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { DefaultText } from "../../../controllers/TextController";
 import TaskList from "./TaskList";
 
-const Tasks = ({ listIndexes, homeGoals, header, quickAddVisibility }) => {
+const Tasks = ({ listIndexes, homeGoals, header, quickAddVisibility, navigation }) => {
     //States
     const [shownTaskList, setShownTaskList] = useState({});
     const [shownQuickAdd, setShownQuickAdd] = useState(false);
-    //UseEffect
-
+    //Fixes deletion Bug at home
+    useEffect(() => {
+        return navigation.addListener("blur", () => {
+            setShownTaskList({});
+        });
+    },[navigation]);
     //Functions
     function toggleTaskList(id) {
         setShownTaskList((prevShownTaskList) => {
