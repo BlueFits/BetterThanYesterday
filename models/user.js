@@ -1,7 +1,7 @@
 export default class User {
-    constructor(id, username, goalsArrayOfObjects) {
-        this.id = id;
+    constructor(id, username, goals) {
+        this._id = id;
         this.username = username;
-        this.goalsArrayOfObjects = goalsArrayOfObjects;
+        this.goals = goals;
     }
 };

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { View, StyleSheet, TextInput, FlatList, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ColorPalette from "react-native-color-palette";
+import moment from "moment";
 //Redux Actions
 import { addGoal } from "../../store/actions/user";
 
@@ -20,6 +21,7 @@ import { capitalizeWords } from "../../customFunctions/Validators";
 import HeaderButton from "../../components/HeaderButton";
 
 const AddGoal = ({ navigation }) => {
+    /* States */
     const [selectedColor, setSelectedColor] = useState("#2ecc71");
     const [goal, setGoal] = useState(null);
     const [goalIsValid, setGoalIsValid] = useState(null);
@@ -27,7 +29,9 @@ const AddGoal = ({ navigation }) => {
 
     //Initiatize variables
     const dispatch = useDispatch();
-
+    const user = useSelector(state => state.userReducer);
+    const userId = user._id;
+    
     //Methods
     function suggestionsRenderHandler(data) {
         return(
@@ -36,16 +40,17 @@ const AddGoal = ({ navigation }) => {
             </TouchableOpacity>
         );
     };
-
+    
     function submitHandler() {
         if (!goalIsValid) {
             setErrors(["Please put a goal or choose from the list below."]);
         } else {
             //Extra Validation
             const validatedText = capitalizeWords(goal);
+            const startDate = moment().format("MMMM Do YYYY");
             //Pass data into redux
-            dispatch(addGoal(validatedText, selectedColor));
-            navigation.navigate("Edit Goal", { goalNameFromAddPage: validatedText });
+            dispatch(addGoal(userId, validatedText, selectedColor, startDate));
+            navigation.navigate("Goals");
         }
     };
 

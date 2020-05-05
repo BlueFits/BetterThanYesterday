@@ -4,7 +4,7 @@ import { Header2Text, DefaultTextItalic } from "../../../controllers/TextControl
 
 import Colors from "../../../constants/Colors";
 
-const CompletedSteps = ({ title, deleteStep, completeStep }) => {
+const CompletedSteps = ({ title }) => {
     return(
         <View style={styles.step}>
             <Header2Text style={styles.stepHeader}>{title}</Header2Text>

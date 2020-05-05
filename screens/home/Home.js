@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useReducer, useState, useCallback } from "react";
+import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 //Custom Components
 import Touchable from "../../components/Touchable";
@@ -11,163 +11,97 @@ import { DefaultText } from "../../controllers/TextController";
 //Constants
 import Colors from "../../constants/Colors";
 //reducer
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+//Actions
+import { fetchUser } from "../../store/actions/user";
 
 const Home = ({ navigation }) => {
+    //Hooks
+    const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false); 
     //Global States
     const homeState = useSelector(state => state.homeNavigationReducer); 
     const homeGoals = useSelector(state => state.userReducer.goals);
-    //Ui information Dependencies
-    const [currentIndicatorText, setCurrentIndicatorText] = useState(progressIndicatorText());
-    const [currentTotalPoints, setCurrentTotalPoints] = useState(totalTaskList("current"));
-    const [previousTotalPoints, setPreviousTotalPoints] = useState(totalTaskList("previous"));
-    const [currentTotalPercentage, setCurrentTotalPercentage] = useState(percentageValidator());
-    //Task dependencies
-    const [listIndexes, setListIndexes] = useState(taskListInfo());
-    const [prevListIndex, setPrevListIndex] = useState(previousTaskListInfo());
+    //List Indexes
+    const [listState, listDispatch] = useReducer(listAction, {
+        currentIndex: taskListInfo(homeGoals, homeState),
+        previousIndex: previousTaskListInfo(homeGoals, homeState),
+    }); 
+    //Ui info states
+    const [uiState, uiDispatch] = useReducer(uiAction, {
+        currentIndicatorText: progressIndicatorText(homeGoals, homeState),
+        currentTotalPoints: totalTaskList("current", homeGoals, homeState),
+        previousTotalPoints: totalTaskList("previous", homeGoals, homeState),
+        currentTotalPercentage: percentageValidator(homeGoals, homeState),
+    });
+
     //React Hooks
+    //DEBUGGING PURPOSES *TEMPORARY
+    const loadUser = useCallback(async () => {
+        setIsLoading(true);
+        await dispatch(fetchUser());
+        setIsLoading(false);
+    }, [dispatch, setIsLoading]);
+
     useEffect(() => {
-        setListIndexes(taskListInfo());
-        setPrevListIndex(previousTaskListInfo());
-        setCurrentTotalPoints(totalTaskList("current"));
-        setPreviousTotalPoints(totalTaskList("previous"));
-        setCurrentIndicatorText(progressIndicatorText());
-        setCurrentTotalPercentage(percentageValidator());
+        loadUser();
+    }, [loadUser]);
+    //End
+    useEffect(() => {
+        uiDispatch({ type: "currentIndicatorText"});
+        uiDispatch({ type: "currentTotalPoints"});
+        uiDispatch({ type: "previousTotalPoints"});
+        uiDispatch({ type: "currentTotalPercentage"});
+        listDispatch({ type: "currentIndex" });
+        listDispatch({ type: "previousIndex" });
     }, [homeGoals, homeState]);
-    //Functions
-    function taskListInfo() {
-        let info = [];
-        for (let i = 0; i < homeGoals.length; i++) {
-            let selectedGoal = homeGoals[i];
-            let selectedStep = selectedGoal.stepsArrayOfObjects;
-            for (let z = 0; z < selectedStep.length; z++) {
-                let selectedTask = selectedStep[z].tasks;
-                for (let x = 0; x < selectedTask.length; x++) {
-                    if (selectedTask[x].taskDate === homeState.currentDate) {
-                        //Show it
-                        info.push({
-                            goalIndex: i,
-                            stepIndex: z,
-                            taskIndex: x,
-                        });
-                    }
-                }
-            }
-        };
-        return info;
-    };
-    
-    function previousTaskListInfo() {
-        let info = [];
-        for (let i = 0; i < homeGoals.length; i++) {
-            let selectedGoal = homeGoals[i];
-            let selectedStep = selectedGoal.stepsArrayOfObjects;
-            for (let z = 0; z < selectedStep.length; z++) {
-                let selectedTask = selectedStep[z].tasks;
-                for (let x = 0; x < selectedTask.length; x++) {
-                    if (selectedTask[x].taskDate === homeState.previousDate) {
-                        //Show it
-                        info.push({
-                            goalIndex: i,
-                            stepIndex: z,
-                            taskIndex: x,
-                        });
-                    }
-                }
-            }
-        };
-        return info;
-    };
-
-    function totalTaskList(status) {
-        if (status === "current") {
-            let accumulator = 0;
-            for (const goal of homeGoals) {
-                for (const step of goal.stepsArrayOfObjects) {
-                    for (const task of step.tasks) {
-                        if (task.taskDate === homeState.currentDate) {
-                            accumulator = accumulator + task.tasksList.length;
-                        }
-                    }
-                }
-            }
-            return accumulator;
-        } else {
-            let accumulator = 0;
-            for (const goal of homeGoals) {
-                for (const step of goal.stepsArrayOfObjects) {
-                    for (const task of step.tasks) {
-                        if (task.taskDate === homeState.previousDate) {
-                            accumulator = accumulator + task.tasksList.length;
-                        }
-                    }
-                }
-            }
-            return accumulator;
-        }
-    };
-
-    function progressIndicatorText() {
-        const currentTotalPoints = totalTaskList("current");
-        const previousTotalPoints = totalTaskList("previous");
-        if ((currentTotalPoints === 0) && (previousTotalPoints === 0)) {
-            return (
-                <DefaultText>
-                    Start your journey!
-                </DefaultText>
-            );
-        }
-        else if (currentTotalPoints < previousTotalPoints) {
-            return (
-                <DefaultText>
-                    Keep up with the yesterday you!
-                </DefaultText>
-            );
-        } else if (currentTotalPoints && (previousTotalPoints === 0)) {
-            return (
-                <DefaultText>
-                    Congratulations on taking your first steps!
-                </DefaultText>
-            );
-        } else if (currentTotalPoints >= previousTotalPoints) {
-            return (
-                <DefaultText>
-                    Nice! Now become even better!
-                </DefaultText>
-            );
-        }
-    };
-
-    function percentageValidator() {
-        const currentPoints = totalTaskList("current");
-        const previousPoints = totalTaskList("previous");
-        if ((!currentPoints) && (!previousPoints)) {
-            return 0;
-        }
-        else if (currentPoints && (!previousPoints)) {
-            return currentPoints/20;
-        }
-        else if ((!currentPoints && previousPoints) || (currentPoints && previousPoints)) {
-            return currentPoints/previousPoints;
-        }
-        else {
-            console.warn("Error in percentage Validator")
-            return;
+    //Local Reducers
+    function uiAction(state, action) {
+        switch (action.type) {
+            case "currentIndicatorText":
+                return {...state, currentIndicatorText: progressIndicatorText(homeGoals, homeState)}
+            case "currentTotalPoints":
+                return {...state, currentTotalPoints: totalTaskList("current", homeGoals, homeState)}
+            case "previousTotalPoints":
+                return {...state, previousTotalPoints: totalTaskList("previous", homeGoals, homeState)}
+            case "currentTotalPercentage":
+                return {...state, currentTotalPercentage: percentageValidator(homeGoals, homeState)}
+            deafult: 
+                throw new Error("error in uiInformation");
         }
     };
     
+    function listAction(state, action) {
+        switch (action.type) {
+            case "currentIndex":
+                return {...state, currentIndex: taskListInfo(homeGoals, homeState)}
+            case "previousIndex":
+                return {...state, previousIndex: previousTaskListInfo(homeGoals, homeState)}
+            default:
+                throw new Error("Error in listAction");
+        };
+    };
+    //Run this while waiting for dipatch
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        );
+    }
+
     return (
         <View style={styles.screen}>
             <ScrollView>
                 <Header
                     homeState={homeState}
-                    currentIndicatorText={currentIndicatorText}
-                    currentTotalPoints={currentTotalPoints}
-                    previousTotalPoints={previousTotalPoints}
-                    currentTotalPercentage={currentTotalPercentage}
+                    currentIndicatorText={uiState.currentIndicatorText}
+                    currentTotalPoints={uiState.currentTotalPoints}
+                    previousTotalPoints={uiState.previousTotalPoints}
+                    currentTotalPercentage={uiState.currentTotalPercentage}
                 />
                 <Tasks 
-                    listIndexes={listIndexes}
+                    listIndexes={listState.currentIndex}
                     homeGoals={homeGoals}
                     header={homeState.header}
                     quickAddVisibility={true}
@@ -175,11 +109,11 @@ const Home = ({ navigation }) => {
                 />
                 <Footer 
                     homeState={homeState}
-                    prevListIndex={prevListIndex}
-                    previousTotalPoints={previousTotalPoints}
+                    prevListIndex={listState.previousIndex}
+                    previousTotalPoints={uiState.previousTotalPoints}
                 />
                 <Tasks
-                    listIndexes={prevListIndex}
+                    listIndexes={listState.previousIndex}
                     homeGoals={homeGoals}
                     header={homeState.header2}
                     quickAddVisibility={false}
@@ -219,5 +153,127 @@ const styles = StyleSheet.create({
         right: 30,
     },
 });
+
+//Functions
+function taskListInfo(homeGoals, homeState) {
+    let info = [];
+    for (let i = 0; i < homeGoals.length; i++) {
+        let selectedGoal = homeGoals[i];
+        let selectedStep = selectedGoal.steps;
+        for (let z = 0; z < selectedStep.length; z++) {
+            let selectedTask = selectedStep[z].tasks;
+            for (let x = 0; x < selectedTask.length; x++) {
+                if (selectedTask[x].taskDate === homeState.currentDate) {
+                    //Show it
+                    info.push({
+                        goalIndex: i,
+                        stepIndex: z,
+                        taskIndex: x,
+                    });
+                }
+            }
+        }
+    };
+    return info;
+};
+
+function previousTaskListInfo(homeGoals, homeState) {
+    let info = [];
+    for (let i = 0; i < homeGoals.length; i++) {
+        let selectedGoal = homeGoals[i];
+        let selectedStep = selectedGoal.steps;
+        for (let z = 0; z < selectedStep.length; z++) {
+            let selectedTask = selectedStep[z].tasks;
+            for (let x = 0; x < selectedTask.length; x++) {
+                if (selectedTask[x].taskDate === homeState.previousDate) {
+                    //Show it
+                    info.push({
+                        goalIndex: i,
+                        stepIndex: z,
+                        taskIndex: x,
+                    });
+                }
+            }
+        }
+    };
+    return info;
+};
+
+function totalTaskList(status, homeGoals, homeState) {
+    if (status === "current") {
+        let accumulator = 0;
+        for (const goal of homeGoals) {
+            for (const step of goal.steps) {
+                for (const task of step.tasks) {
+                    if (task.taskDate === homeState.currentDate) {
+                        accumulator = accumulator + task.tasksList.length;
+                    }
+                }
+            }
+        }
+        return accumulator;
+    } else {
+        let accumulator = 0;
+        for (const goal of homeGoals) {
+            for (const step of goal.steps) {
+                for (const task of step.tasks) {
+                    if (task.taskDate === homeState.previousDate) {
+                        accumulator = accumulator + task.tasksList.length;
+                    }
+                }
+            }
+        }
+        return accumulator;
+    }
+};
+
+function progressIndicatorText(homeGoals, homeState) {
+    const currentTotalPoints = totalTaskList("current", homeGoals, homeState);
+    const previousTotalPoints = totalTaskList("previous", homeGoals, homeState);
+    if ((currentTotalPoints === 0) && (previousTotalPoints === 0)) {
+        return (
+            <DefaultText>
+                Start your journey!
+            </DefaultText>
+        );
+    }
+    else if (currentTotalPoints < previousTotalPoints) {
+        return (
+            <DefaultText>
+                Keep up with the yesterday you!
+            </DefaultText>
+        );
+    } else if (currentTotalPoints && (previousTotalPoints === 0)) {
+        return (
+            <DefaultText>
+                Congratulations on taking your first steps!
+            </DefaultText>
+        );
+    } else if (currentTotalPoints >= previousTotalPoints) {
+        return (
+            <DefaultText>
+                Nice! Now become even better!
+            </DefaultText>
+        );
+    }
+};
+
+function percentageValidator(homeGoals, homeState) {
+    const currentPoints = totalTaskList("current", homeGoals, homeState);
+    const previousPoints = totalTaskList("previous", homeGoals, homeState);
+    if ((!currentPoints) && (!previousPoints)) {
+        return 0;
+    }
+    else if (currentPoints && (!previousPoints)) {
+        return currentPoints/20;
+    }
+    else if ((!currentPoints && previousPoints) || (currentPoints && previousPoints)) {
+        return currentPoints/previousPoints;
+    }
+    else {
+        console.warn("Error in percentage Validator")
+        return;
+    }
+};
 
 export default Home;

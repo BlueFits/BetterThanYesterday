@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text, ScrollView } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,8 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import StepModel from "../../models/step";
 
 //Custom Components
-import Step from "../../components/local/goals/EditGoalStep";
-import CSteps from "../../components/local/goals/CompletedSteps";
+import Step from "../../components/local/goals/Step";
+import CompletedSteps from "../../components/local/goals/CompletedSteps";
 import EditGoalMenu from "../../components/local/goals/EditGoalMenu";
 import Dialog from "../../components/Dialog";
 
@@ -26,26 +26,22 @@ import { DefaultText, SmallText, HeaderText, SmallTextItalic } from "../../contr
 import Colors from "../../constants/Colors";
 
 //Redux reducers
-import { udpateStep, addStep, updateGoal } from "../../store/actions/user";
+import { updateStep, addStep, updateGoal } from "../../store/actions/user";
 
 const EditGoal = ({ navigation, route }) => {
     //Initialize variables
     const dispatch = useDispatch();
-    const { goalId, goalNameFromAddPage } = route.params;
-    //Dynamic data
-    let selectedGoal = useSelector(state => state.userReducer.goals.find((goal) => goal.id === goalId));
-    if (goalNameFromAddPage) {
-        selectedGoal = useSelector(state => state.userReducer.goals.find((goal) => goal.goalName === goalNameFromAddPage));
-    }
+    const { goalId } = route.params;
+    const userId = useSelector(state => state.userReducer._id);
+    const selectedGoal = useSelector(state => state.userReducer.goals.find((goal) => goal._id === goalId));
     //Deconstruct needed variables
-    const { goalName, startDate, status, stepsArrayOfObjects, id } = selectedGoal;
+    const { goalName, startDate, status, steps, _id } = selectedGoal;
     //Initialize States
-    const [steps, setSteps]= useState(stepFilter(stepsArrayOfObjects, "current"));
-    const [completedSteps, setCompletedSteps] = useState(stepFilter(stepsArrayOfObjects, "completed"));
+    const [stepsState, setStepsState]= useState(stepFilter(steps, "current"));
+    const [completedSteps, setCompletedSteps] = useState(stepFilter(steps, "completed"));
     const [addAStepText, setAddAStepText] = useState(null);
     const [stepIsValid, setStepIsValid] = useState(null);
     const [dialogIsVisible, setDialogIsVisible] = useState(false);
-
     //Methods
     //Filter for stepArray
     function stepFilter(stepData, stepStatus) {
@@ -72,33 +68,35 @@ const EditGoal = ({ navigation, route }) => {
     };
 
     function markAsCompletedHandler() {
-        dispatch(updateGoal(id, "setCompleted"));
+        dispatch(updateGoal(_id, "setCompleted", "", userId));
         navigation.popToTop();
     };
     //BUG: Renaming Does not work when it is coming from add page, change the way it navigates
     function renameGoalHandler(text) {
-        if ((text === null) || (text.trim().length === 0)) {
+        if ((text === null) || (text.trim().length === 0) || (text === undefined)) {
             setDialogIsVisible(false);
+            return;
         } else {
             setDialogIsVisible(false);
-            dispatch(updateGoal(id, "renameGoal", capitalizeWords(text)));
+            dispatch(updateGoal(_id, "renameGoal", capitalizeWords(text)));
+            return;
         }
     };
     
-    function deleteStepHandler(goalName, stepId, stepIndex, updateAction) {
-        const stepSnapShot = [...steps];
+    function deleteStepHandler(goalId, stepId, stepIndex, updateAction) {
+        const stepSnapShot = [...stepsState];
         stepSnapShot.splice(stepIndex, 1);
-        setSteps(stepSnapShot);
-        dispatch(udpateStep(goalName, stepId, updateAction));
+        setStepsState(stepSnapShot);
+        dispatch(updateStep(goalId, stepId, updateAction));
     };
 
-    function completeStepHandler(goalName, stepId, stepIndex, updateAction) {
-        const stepSnapShot = steps.concat(completedSteps);
+    function completeStepHandler(goalId, stepId, stepIndex, updateAction) {
+        const stepSnapShot = stepsState.concat(completedSteps);
         //Amazing insight from stackOverflow
         stepSnapShot[stepIndex] = {...stepSnapShot[stepIndex], isComplete: true};
-        setSteps(stepFilter(stepSnapShot, "current"));
+        setStepsState(stepFilter(stepSnapShot, "current"));
         setCompletedSteps(stepFilter(stepSnapShot, "completed"));
-        dispatch(udpateStep(goalName, stepId, updateAction));
+        dispatch(updateStep(goalId, stepId, updateAction));
     };
 
     function addAStepTextHandler(text) {
@@ -107,26 +105,25 @@ const EditGoal = ({ navigation, route }) => {
         setAddAStepText(text);
     };
 
-    function addAStepSubmitHandler() {
+    //Async Functions
+    async function addAStepSubmitHandler() {
         if (!stepIsValid) {
-            Keyboard.dismiss()
+            Keyboard.dismiss();
         } else {
-        //Extra Validation
-        setAddAStepText(null);
-        const stepToAdd = addAStepText.split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.substring(1))
-        .join(" ");
-        //Display new step
-        let addAStepSnapshot = [...steps];
-        addAStepSnapshot = [
-            ...addAStepSnapshot, 
-            new StepModel("stepId"+stepToAdd.replace(/\s/g,""), stepToAdd, false, [])
-        ];
-        setSteps(addAStepSnapshot);
-        //Send to redux global
-        dispatch(addStep(id, stepToAdd));
+            const stepToAdd = addAStepText.split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.substring(1))
+            .join(" ");
+            await dispatch(addStep(_id, stepToAdd));
+            const createdStep = selectedGoal.steps.find(step => step.stepName === stepToAdd);            
+            let addAStepSnapshot = [...stepsState];
+            addAStepSnapshot = [
+                ...addAStepSnapshot, 
+                new StepModel(createdStep._id, stepToAdd, false, [])
+            ];
+            setStepsState(addAStepSnapshot);
+            setAddAStepText(null);
         }
-    };
+    }
 
     //Local Navigation Settings
     navigation.setOptions({
@@ -149,7 +146,8 @@ const EditGoal = ({ navigation, route }) => {
         },
     });
     
-    return(        
+    return(       
+        <ScrollView>
         <TouchableWithoutFeedback touchSoundDisabled={true} onPress={() => Keyboard.dismiss()}>
         <View style={styles.screen}>
         <Dialog 
@@ -180,19 +178,18 @@ const EditGoal = ({ navigation, route }) => {
                     order to achieve your goal.
                 </DefaultText>
             </View>
-
             <View style={styles.stepContainer}>
-                {steps.map((selectedStep, index) => {
+                {stepsState.map((selectedStep, index) => {
                     return <Step 
                         title={selectedStep.stepName} 
                         key={"key"+index} 
-                        deleteStep={deleteStepHandler.bind(this, goalName, selectedStep.id, index, "delete")}
-                        completeStep={completeStepHandler.bind(this, goalName, selectedStep.id, index, "complete")}
+                        deleteStep={deleteStepHandler.bind(this, _id, selectedStep._id, index, "delete")}
+                        completeStep={completeStepHandler.bind(this, _id, selectedStep._id, index, "complete")}
                     />
                 })}
                 {completedSteps.map((selectedCompletedStep, index) => {
                     return(
-                        <CSteps
+                        <CompletedSteps
                             title={selectedCompletedStep.stepName}
                             key={"keyCompletedStep"+index}
                         />
@@ -219,6 +216,7 @@ const EditGoal = ({ navigation, route }) => {
             </View>
         </View>
         </TouchableWithoutFeedback>
+        </ScrollView> 
     );
 };
 

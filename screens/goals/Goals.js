@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { DefaultText, HeaderText } from "../../controllers/TextController";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -12,9 +12,9 @@ import { updateGoal } from "../../store/actions/user";
 const Goals = ({ navigation }) => {
 
     const dispatch = useDispatch();
+    const userId = useSelector(state => state.userReducer._id);
     const userGoals = useSelector(state => state.userReducer.goals);
     const goalState = useSelector(state => state.goalsNavigationReducer);    
-
     //Renders
     let addAGoal = null;
     if (goalState.destination === "active") {
@@ -32,20 +32,6 @@ const Goals = ({ navigation }) => {
         );
     }    
 
-    const swipeButtons = [
-        <TouchableOpacity onPress={deleteGoalHandler}>
-            <View style={{
-                borderWidth: 1,
-                height: 68,
-                justifyContent: "center",
-                padding: 10,
-                marginLeft: containerPadding,
-            }}>
-                <DefaultText>Delete</DefaultText>
-            </View>
-        </TouchableOpacity>
-    ];
-
     //Handlers
     function goalSelectHandler(goalId) {
         navigation.navigate("Edit Goal", {
@@ -54,10 +40,11 @@ const Goals = ({ navigation }) => {
     };
 
     function deleteGoalHandler(goalId) {
-        dispatch(updateGoal(goalId, "deleteGoal"));
+        dispatch(updateGoal(goalId, "deleteGoal", "", userId));
     };
 
     return(
+        <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.screen}>
             <View style={styles.listContainer}>
                 <View style={styles.header}>
@@ -71,7 +58,6 @@ const Goals = ({ navigation }) => {
                         return (
                             <Swipeable 
                                 key={"GoalKey:"+index}
-                                
                                 rightActionActivationDistance={250}
                                 onRightActionRelease={deleteGoalHandler.bind(this, goal.id)}
                                 rightButtons={[
@@ -86,10 +72,10 @@ const Goals = ({ navigation }) => {
                             >
                             <GoalList 
                                 goalName={goal.goalName}
-                                stepsLength={goal.stepsArrayOfObjects.length}
+                                stepsLength={goal.steps.length}
                                 startDate={goal.startDate}
                                 customStyles={{ backgroundColor: goal.goalColor }}
-                                onPress={goalSelectHandler.bind(this, goal.id)}
+                                onPress={goalSelectHandler.bind(this, goal._id)}
                             />
                             </Swipeable>
                         );
@@ -98,6 +84,7 @@ const Goals = ({ navigation }) => {
             </View>
             {addAGoal}
         </View>
+        </ScrollView>
     );
 };
 
@@ -153,13 +140,3 @@ const styles = StyleSheet.create({
 });
 
 export default Goals;
-/*
-<GoalList 
-    key={"keyOnGoing:"+index}
-    goalName={goal.item.goalName}
-    stepsLength={goal.item.stepsArrayOfObjects.length}
-    startDate={goal.item.startDate}
-    customStyles={{ backgroundColor: goal.item.goalColor }}
-    onPress={goalSelectHandler.bind(this, goal.item.id)}
-/>
-*/

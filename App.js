@@ -5,8 +5,9 @@ import { enableScreens } from "react-native-screens";
 import { MenuProvider } from "react-native-popup-menu";
 
 //React-Redux Setup
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
+import ReduxThunk from "redux-thunk";
 //Reducers
 import userReducer from "./store/reducers/user";
 import goalsNavigationReducer from "./store/reducers/navigation/goalNavigation";
@@ -24,7 +25,7 @@ const rootReducer = combineReducers({
   goalsNavigationReducer,
   homeNavigationReducer,
 });
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 //Initialize Fonts
 function fetchFonts() {
@@ -41,7 +42,6 @@ console.log(`
   -----Bug Report-----
   -Edit Goals 2
   --deleting a step bug
-  --stepname is too long
   -Home
   --page update is too slow//Try putting the render in a state
   --stack header at add Task is too long
