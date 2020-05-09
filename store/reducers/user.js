@@ -13,12 +13,12 @@ const initialState = {
     goals: loggedInUser.goalsArrayOfObjects,
 };
 */
-export default function(state = { username: "init", goals: [] }, action) {
+export default function(state = { email: "init", goals: [] }, action) {
     switch (action.type) {
         case SET_USER:
             return {
                 _id: action.id,
-                username: action.username,
+                email: action.email,
                 goals: action.goals,
             }
         case ADD_GOAL:
@@ -89,7 +89,7 @@ export default function(state = { username: "init", goals: [] }, action) {
                 return { ...state, goals: updateTaskSnap };
             } else {
                 //create new task
-                updateTaskSelectedStep.tasks.push(new Task(`taskIdFor:${action.task}`, action.currentDate, [action.task]));
+                updateTaskSelectedStep.tasks.push(new Task(action.taskId, action.currentDate, [action.task]));
                 return { ...state, goals: updateTaskSnap };
             }
         default:

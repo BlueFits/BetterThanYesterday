@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Text, ScrollView } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";

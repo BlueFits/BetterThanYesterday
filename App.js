@@ -12,6 +12,7 @@ import ReduxThunk from "redux-thunk";
 import userReducer from "./store/reducers/user";
 import goalsNavigationReducer from "./store/reducers/navigation/goalNavigation";
 import homeNavigationReducer from "./store/reducers/navigation/homeNavigation";
+import authReducer from "./store/reducers/auth";
 
 //Navigation
 import NavigationController from "./navigation/NavigationController";
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   userReducer,
   goalsNavigationReducer,
   homeNavigationReducer,
+  authReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
@@ -46,15 +48,21 @@ console.log(`
   --page update is too slow//Try putting the render in a state
   --stack header at add Task is too long
   --Long current indicator Text
+  -Registration
+  --Make email registration lowercase
 `);
 
 //Main Component
 export default function App() { 
   //Initialize States
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   if (!fontLoaded) {
     return <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />;
-  } else {
+  } 
+
+  else {
     return (
       <Provider store={store}>
         <MenuProvider>

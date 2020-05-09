@@ -20,8 +20,8 @@ const AddTask = ({ navigation, route }) => {
     const dispatch = useDispatch();
     //Select goals
     const userGoals = useSelector(state => state.userReducer.goals);
-    const selectedGoal = userGoals.find(goal => goal.id === goalId);
-    const selectedStep = selectedGoal.stepsArrayOfObjects.find(step => step.id === stepId);
+    const selectedGoal = userGoals.find(goal => goal._id === goalId);
+    const selectedStep = selectedGoal.steps.find(step => step._id === stepId);
     //States
     const [task, setTask] = useState(null);
     //Handlers

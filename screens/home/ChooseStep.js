@@ -13,7 +13,7 @@ const chooseStep = ({ navigation, route }) => {
     const { goalId } = route.params
     //Initialize variables
     const userGoals = useSelector(state => state.userReducer.goals);
-    const selectedGoal = userGoals.find(goal => goal.id === goalId);
+    const selectedGoal = userGoals.find(goal => goal._id === goalId);
     //functions
     function chooseStepHandler(stepId) {
         navigation.navigate("AddTask", { goalId, stepId });
@@ -29,15 +29,6 @@ const chooseStep = ({ navigation, route }) => {
         },
     });
     //Outside renders
-    const stepList = (
-        <View style={styles.touchableContainer}>
-                <Touchable>
-                    <View style={{ paddingVertical: 20, }}>
-                        <DefaultTextBold>Active Ideation</DefaultTextBold>
-                    </View>
-                </Touchable>
-            </View>
-    );
     return(
     <View style={styles.screen}>
         <View style={styles.header}>
@@ -51,10 +42,10 @@ const chooseStep = ({ navigation, route }) => {
         </View>
 
         <View>
-            {selectedGoal.stepsArrayOfObjects.map((step ,index) => {
+            {selectedGoal.steps.map((step ,index) => {
                 return(
                     <View key={"keyFor:"+step+":"+index} style={styles.touchableContainer}>
-                        <Touchable onPress={chooseStepHandler.bind(this, step.id)}>
+                        <Touchable onPress={chooseStepHandler.bind(this, step._id)}>
                             <View style={{ paddingVertical: 20, }}>
                                 <DefaultTextBold>{step.stepName}</DefaultTextBold>
                             </View>

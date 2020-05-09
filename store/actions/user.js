@@ -5,35 +5,73 @@ export const ADD_STEP = "ADD_STEP";
 export const UPDATE_TASK = "UPDATE_TASK";
 //For Debugging
 export const SET_USER = "SET_USER";
+//const USER_ID = "5eb2ee876cb7510a8c50cf31";
+//Server
+import ServerRoot from "../../config/serverConfig";
+import CompletedSteps from "../../components/local/goals/CompletedSteps";
+const Root = ServerRoot.development;
 
-export const fetchUser = () => {
+export const fetchUser = (USER_ID) => {
     return async dispatch => {
-        const response = await fetch("http://192.168.2.16:3000/users/fetch/5eaeef2ccf6f844cd86a8310");
+        const response = await fetch(Root + "/users/fetch/" + USER_ID);
         const user = await response.json();
+        console.log(`Logged in ${user.email}`);
         dispatch({
             type: SET_USER,
             id: user._id,
-            username: user.username,
+            email: user.email,
             goals: user.goals,
         })
     }
 };
+
 export const updateTask = (goalId, stepId, task, currentDate) => {
-    return {
-        type: UPDATE_TASK,
-        goalId,
-        stepId,
-        task,
-        currentDate,
-    };
-};
-/* Test Code */
-export const addGoal = (userId, goal, selectedColor, startDate) => {
     return async dispatch => {
-        //any async code here
-        const response = await fetch("http://192.168.2.16:3000/users/goals/add", {
+        const response = await fetch(Root + "/users/tasks/update", {
             method: "POST",
             headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                stepId,
+                task,
+                currentDate,
+            }),
+        });
+
+        const resData = await response.json();
+
+        if (resData.update) {
+            dispatch({
+                type: UPDATE_TASK,
+                goalId,
+                stepId,
+                task,
+                currentDate,
+                taskId: null,
+            });
+        } else {
+            dispatch({
+                type: UPDATE_TASK,
+                goalId,
+                stepId,
+                task,
+                currentDate,
+                taskId: resData.newTaskId,
+            });
+        }
+        
+    };
+};
+//Route Protected
+export const addGoal = (userId, goal, selectedColor, startDate) => {
+    return async (dispatch, getState) => {
+        //any async code here
+        
+        const response = await fetch(Root + "/users/goals/add", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + getState().authReducer.token,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -53,16 +91,17 @@ export const addGoal = (userId, goal, selectedColor, startDate) => {
         });
     }
 };
-
+//Route protected
 export const updateGoal = (goalId, updateAction, updateValue, userId) => {
 
-    return async dispatch => {
+    return async (dispatch, getState) => {
         try {
             switch (updateAction) {
                 case "deleteGoal":
-                    await fetch("http://192.168.2.16:3000/users/goals/delete", {
+                    const deleteResponse = await fetch(Root + "/users/goals/delete", {
                         method: "POST",
                         headers: {
+                            "Authorization": "Bearer " + getState().authReducer.token,
                             "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
@@ -70,17 +109,25 @@ export const updateGoal = (goalId, updateAction, updateValue, userId) => {
                             goalId,
                         }),
                     });
-                    dispatch({
-                        type: UPDATE_GOAL,
-                        goalId,
-                        updateAction,
-                        updateValue,
-                    });
+
+                    if (!deleteResponse.ok) {
+                        const errResData = await deleteResponse.json();
+                        throw new Error(errResData.error);
+                    } else {
+                        dispatch({
+                            type: UPDATE_GOAL,
+                            goalId,
+                            updateAction,
+                            updateValue,
+                        });
+                    }
+
                     break;
                 case "setCompleted":
-                    await fetch("http://192.168.2.16:3000/users/goals/setAsCompleted", {
+                    const setCompletedResponse = await fetch(Root + "/users/goals/setAsCompleted", {
                         method: "POST",
                         headers: {
+                            "Authorization": "Bearer " + getState().authReducer.token,
                             "Content-Type": "application/json",
                         },
                         body: JSON.stringify({
@@ -88,17 +135,25 @@ export const updateGoal = (goalId, updateAction, updateValue, userId) => {
                             userId,
                         }),
                     });
-                    dispatch({
-                        type: UPDATE_GOAL,
-                        goalId,
-                        updateAction,
-                        updateValue,
-                    });
+
+                    if (!setCompletedResponse.ok) {
+                        const errResData = await setCompletedResponse.json();
+                        throw new Error(errResData.error);
+                    } else {
+                        dispatch({
+                            type: UPDATE_GOAL,
+                            goalId,
+                            updateAction,
+                            updateValue,
+                        });
+                    }
+
                     break;
                 case "renameGoal":
-                    await fetch("http://192.168.2.16:3000/users/goals/renameGoal", {
+                    const renameGoalResponse = await fetch(Root + "/users/goals/rename", {
                         method: "POST",
                         headers: {
+                            "Authorization": "Bearer " + getState().authReducer.token,
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
@@ -106,12 +161,19 @@ export const updateGoal = (goalId, updateAction, updateValue, userId) => {
                             updateValue,
                         }),
                     });
-                    dispatch({
-                        type: UPDATE_GOAL,
-                        goalId,
-                        updateAction,
-                        updateValue,
-                    });
+
+                    if (!renameGoalResponse.ok) {
+                        const errResData = await renameGoalResponse.json();
+                        throw new Error(errResData.error);
+                    } else {
+                        dispatch({
+                            type: UPDATE_GOAL,
+                            goalId,
+                            updateAction,
+                            updateValue,
+                        });
+                    }
+
                     break;
                 default:
                     
@@ -126,7 +188,7 @@ export const addStep = (goalId, stepToAdd) => {
 
     return async dispatch => {
         try {
-            const response = await fetch("http://192.168.2.16:3000/users/steps/addStep", {
+            const response = await fetch(Root + "/users/steps/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -156,7 +218,7 @@ export const updateStep = ( goalId, stepId, updateAction) => {
         try {
             switch (updateAction) {
                 case "complete":
-                    await fetch("http://192.168.2.16:3000/users/steps/setAsCompleted", {
+                    await fetch(Root + "/users/steps/setAsCompleted", {
                         method: "POST",
                         headers: {
                             "Content-type": "application/json",
@@ -173,7 +235,7 @@ export const updateStep = ( goalId, stepId, updateAction) => {
                     });
                     break;
                 case "delete":
-                    await fetch("http://192.168.2.16:3000/users/steps/delete", {
+                    await fetch(Root + "/users/steps/delete", {
                         method: "POST",
                         headers: {
                             "Content-type": "application/json",

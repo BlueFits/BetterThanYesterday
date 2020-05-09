@@ -33,10 +33,10 @@ function AddTasks({ navigation }) {
                             <GoalList 
                                 key={"KeyFor:"+goal+index}
                                 goalName={goal.goalName}
-                                stepsLength={goal.stepsArrayOfObjects.length}
+                                stepsLength={goal.steps.length}
                                 startDate={goal.startDate}
                                 customStyles={{ backgroundColor: goal.goalColor }}
-                                onPress={chooseTaskHandler.bind(this, goal.id)}
+                                onPress={chooseTaskHandler.bind(this, goal._id)}
                             />
                         );
                     }
@@ -55,35 +55,3 @@ const styles = StyleSheet.create({
 });
 
 export default AddTasks;
-
-/*
-{userGoals.map((goal, index) => {
-                    if (goal.status === goalState.goalStatus) {
-                        return (
-                            <Swipeable 
-                                key={"GoalKey:"+index}
-                                
-                                rightActionActivationDistance={250}
-                                onRightActionRelease={deleteGoalHandler.bind(this, goal.id)}
-                                rightButtons={[
-                                    <TouchableOpacity onPress={deleteGoalHandler.bind(this, goal.id)}>
-                                        <View style={styles.rightSwipeButton}>
-                                            <View style={styles.rightSwipeIcon}>
-                                                <MaterialIcons name="delete" size={23} color="#fff"/>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                ]}
-                            >
-                            <GoalList 
-                                goalName={goal.goalName}
-                                stepsLength={goal.stepsArrayOfObjects.length}
-                                startDate={goal.startDate}
-                                customStyles={{ backgroundColor: goal.goalColor }}
-                                onPress={goalSelectHandler.bind(this, goal.id)}
-                            />
-                            </Swipeable>
-                        );
-                    }
-                })}
-*/

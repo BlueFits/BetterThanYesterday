@@ -1,14 +1,14 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 
-//Initialize Defaults
-let imageSize = 35;
-
-function HeaderLogo(props) {
+function HeaderLogo() {
     return(
         <Image style={styles.logoStyles} source={require("../../assets/images/LogoNoTxt.png")}/>
     );
 };
+
+//Initialize Defaults
+const imageSize = 35;
 
 const styles = StyleSheet.create({
     logoStyles: {

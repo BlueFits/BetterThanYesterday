@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState, useCallback } from "react";
 import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import moment from "moment";
 //Custom Components
 import Touchable from "../../components/Touchable";
 import Header from "../../components/local/home/Header";
@@ -22,6 +23,7 @@ const Home = ({ navigation }) => {
     //Global States
     const homeState = useSelector(state => state.homeNavigationReducer); 
     const homeGoals = useSelector(state => state.userReducer.goals);
+    const authId = useSelector(state => state.authReducer.userId);
     //List Indexes
     const [listState, listDispatch] = useReducer(listAction, {
         currentIndex: taskListInfo(homeGoals, homeState),
@@ -39,10 +41,9 @@ const Home = ({ navigation }) => {
     //DEBUGGING PURPOSES *TEMPORARY
     const loadUser = useCallback(async () => {
         setIsLoading(true);
-        await dispatch(fetchUser());
+        await dispatch(fetchUser(authId));
         setIsLoading(false);
     }, [dispatch, setIsLoading]);
-
     useEffect(() => {
         loadUser();
     }, [loadUser]);
@@ -104,7 +105,7 @@ const Home = ({ navigation }) => {
                     listIndexes={listState.currentIndex}
                     homeGoals={homeGoals}
                     header={homeState.header}
-                    quickAddVisibility={true}
+                    quickAddVisibility={homeState.currentDate === moment().format("MMMM Do YYYY") ? true : false}
                     navigation={navigation}
                 />
                 <Footer 

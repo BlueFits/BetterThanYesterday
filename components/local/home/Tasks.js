@@ -45,11 +45,11 @@ const Tasks = ({ listIndexes, homeGoals, header, quickAddVisibility, navigation 
             {homeGoals.map((goal, goalIndex) => {
                 return listIndexes.map((item, itemIndex) => {
                     if (item.goalIndex === goalIndex) {
-                    if (goal.stepsArrayOfObjects.length === 0) {
+                    if (goal.steps.length === 0) {
                             return <View></View>;
                     } else {
-                        const selectedStep = goal.stepsArrayOfObjects[item.stepIndex];
-                        const selectedTask = goal.stepsArrayOfObjects[item.stepIndex].tasks[item.taskIndex];
+                        const selectedStep = goal.steps[item.stepIndex];
+                        const selectedTask = goal.steps[item.stepIndex].tasks[item.taskIndex];
                     return (
                             <TaskList 
                                 key={"KeyForItemIndex"+itemIndex}

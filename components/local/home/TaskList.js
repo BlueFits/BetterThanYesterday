@@ -15,7 +15,7 @@ const TaskList = ({ goal, selectedTask, selectedStep, toggleTaskList, toggleQuic
     //Functions
     function addHandler(task) {
         const currentDate = moment().format("MMMM Do YYYY");
-        dispatch(updateTask(goal.id, selectedStep.id, capitalizeWords(task), currentDate));
+        dispatch(updateTask(goal._id, selectedStep._id, capitalizeWords(task), currentDate));
         toggleQuickAdd();
     };
 
