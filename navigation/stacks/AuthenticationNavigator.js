@@ -5,7 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import HeaderLogo from "../../components/images/HeaderLogo";
 
 //Screens
-import AuthenticationOptions from "../../screens/login-register/AuthenticationOption";
+import splash from "../../screens/splash";
+import authMenu from "../../screens/login-register/authMenu";
 import Register from "../../screens/login-register/Register";
 import Login from "../../screens/login-register/Login";
 
@@ -14,10 +15,17 @@ const Stack = createStackNavigator();
 const AuthenticationNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{...defaultOptions, ...TransitionPresets.SlideFromRightIOS}}>
+            <Stack.Navigator  initialRouteName="splashScreen" screenOptions={{...defaultOptions, ...TransitionPresets.SlideFromRightIOS}}>
+                <Stack.Screen 
+                    name="splashScreen" 
+                    component={splash} 
+                />
                 <Stack.Screen 
                     name="menu" 
-                    component={AuthenticationOptions} 
+                    component={authMenu} 
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen 
                     name="register" 

@@ -48,7 +48,7 @@ const Login = ({ navigation, route }) => {
                 <Item 
                     title="BACK" 
                     iconName="md-arrow-back"
-                    onPress={() => navigation.popToTop()}
+                    onPress={() => navigation.navigate("menu")}
                 />
             </HeaderButtons>
         ),

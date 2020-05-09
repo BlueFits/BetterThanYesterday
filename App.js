@@ -48,8 +48,7 @@ console.log(`
   --page update is too slow//Try putting the render in a state
   --stack header at add Task is too long
   --Long current indicator Text
-  -Registration
-  --Make email registration lowercase
+  --Completed step shows up in adding a log
 `);
 
 //Main Component

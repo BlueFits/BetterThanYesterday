@@ -1,37 +1,19 @@
-export const SIGNUP = "SIGNUP";
-export const LOGIN = "LOGIN";
+import { AsyncStorage } from "react-native";
+
+export const AUTHENTICATE = "AUTHENTICATE";
 
 //Server
 import ServerRoot from "../../config/serverConfig";
 const Root = ServerRoot.development;
 
-/*
-export const signup = (email, password, rePassword) => {
-    return async dispatch => {
-        const response = await fetch(Root + "/users/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                rePassword,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error("Something went wrong");
-        }
-        //const resData = await response.json();
-        
-        dispatch({
-            type: SIGNUP
-        });
-        
+export const authenticate = (userId, token) => {
+    return {
+        type: AUTHENTICATE,
+        userId,
+        token,
     };
 };
-*/
+
 export const login = (email, password) => {
     return async dispatch => {
         const response = await fetch(Root + "/users/login", {
@@ -51,11 +33,17 @@ export const login = (email, password) => {
         } else {
             const resData = await response.json();
                 
-            dispatch({
-                type: LOGIN,
-                token: resData.token,
-                userId: resData.userId,
-            });
+            dispatch(authenticate(resData.userId, resData.token));
+            const expiresIn = new Date(new Date().getTime() + 43200 * 1000);
+            saveDataToStorage(resData.token, resData.userId, expiresIn);
         }    
     };
+};
+
+const saveDataToStorage = (token, userId, expiration) => {
+    AsyncStorage.setItem("userData", JSON.stringify({
+        token,
+        userId,
+        expiryDate: expiration.toISOString(),
+    }));
 };
