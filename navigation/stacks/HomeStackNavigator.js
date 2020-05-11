@@ -28,6 +28,9 @@ const HomeStackNavigator = () => {
             }} />
             <Stack.Screen name="AddGoal" component={AddGoalHome} options={{
                 title: "",
+                headerBackTitleStyle: {
+                    color: "transparent",
+                },
                 headerBackImage: () => {
                     return (
                         <HeaderButtons HeaderButtonComponent={HeaderButton}>

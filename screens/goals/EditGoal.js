@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
     header: {
         flexDirection: "row",
         height: 80,
+        paddingVertical: 10,
     },
     pageDescription: {
         paddingVertical: 10,

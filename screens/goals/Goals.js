@@ -24,7 +24,7 @@ const Goals = ({ navigation }) => {
                     navigation.navigate("Add Goal");
                 }}>
                 <View style={styles.addAgoalContainer}>
-                    <Ionicons name="ios-add" size={22} color={Colors.grey} />
+                    <Ionicons name="ios-add" size={22} color={Colors.grey} style={{ marginRight: 5, }}/>
                     <DefaultText style={{ color: Colors.grey }}>Add a goal</DefaultText>
                 </View>
                 </Touchable>
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     },
     addAgoalContainer: {
         flexDirection: "row",
+        alignItems: "center",
         paddingVertical: 15,
     },
     renderHiddenItemStyles: {

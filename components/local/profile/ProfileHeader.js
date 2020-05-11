@@ -15,6 +15,7 @@ const ProfileHeader = ({ headerText, subHeader1, subHeader2, style }) => {
 const styles = StyleSheet.create({
     header: { 
         backgroundColor: "#fff", 
+        paddingTop: 10,
         paddingBottom: 25,
         paddingHorizontal: 20,
     },

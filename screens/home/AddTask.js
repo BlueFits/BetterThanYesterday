@@ -46,7 +46,7 @@ const AddTask = ({ navigation, route }) => {
         headerTitleStyle: {
             color: "#fff",
         },
-        title: selectedStep.stepName.length <= 15 ? `${selectedGoal.goalName} / ${selectedStep.stepName}`: `${selectedGoal.goalName} / ${selectedStep.stepName.substring(0, 15)}...`,
+        title: selectedStep.stepName.length <= 10 ? `${selectedGoal.goalName} / ${selectedStep.stepName}`: `${selectedGoal.goalName} / ${selectedStep.stepName.substring(0, 10)}...`,
     });
     
     return(

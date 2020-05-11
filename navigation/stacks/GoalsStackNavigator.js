@@ -25,6 +25,11 @@ const GoalsStackNavigator = () => {
                 cardStyle: {
                     backgroundColor: Colors.accentC,
                 },
+                headerStyle: {
+                    backgroundColor: Colors.accentC,
+                    shadowColor: "transparent",
+                    elevation: 0,
+                },
             }} />
             <Stack.Screen name="Edit Goal" component={EditGoal} />
         </Stack.Navigator>
@@ -41,13 +46,13 @@ const defaultScreenOptions= {
     headerStyle: {
         elevation: 0,
         shadowColor: "transparent",
-        backgroundColor: "transparent",
+        backgroundColor: "#fff",
     },
     headerTitleStyle: {
         color: "transparent",
     },
     cardStyle: {
-        backgroundColor: "white",
+        backgroundColor: "#fff",
     },
 };
 
