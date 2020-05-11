@@ -1,13 +1,15 @@
 {
   "expo": {
-    "name": "bty-react-native",
-    "slug": "bty-react-native",
+    "name": "Better Than Yesterday",
+    "slug": "better-than-yesterday",
+    "description": "Simple app that aims to help build a better lifestyle, through habbit building.",
+    "privacy": "public",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "1.0.0",
+    "version": "0.1.0",
+    "sdkVersion": "37.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,10 +21,20 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "./assets/**/*"
     ],
     "ios": {
+      "bundleIdentifier": "dev.betterthanyesterday.better-than-yesterday",
+      "buildNumber": "0.1.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "dev.betterthanyesterday.better_than_yesterday",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage" : "./assets/adaptiveIcon.png",
+        "backgroundColor": "#ffffff"
+      }
     }
   }
 }

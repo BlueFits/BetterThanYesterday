@@ -24,7 +24,7 @@ const profileMenu = ({ navigation }) => {
 
     function sendFeedbackHandler () {
         MailComposer.composeAsync({
-            recipients:["christianftw@ymail.com"],
+            recipients:["btydevelopmentteam@gmail.com"],
             subject: "BTY Feedback - " + user.email,
         });
     };

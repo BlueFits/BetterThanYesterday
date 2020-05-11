@@ -31,6 +31,7 @@ const Login = ({ navigation, route }) => {
     const [error, setError] = useState();
     async function loginHandler() {
         setError(null);
+        setPassword("");
         setIsLoading(true);
         try {
             await dispatch(login(email, password));
@@ -99,17 +100,6 @@ const Login = ({ navigation, route }) => {
 
                                 <View>
                                     { isLoading ? <ActivityIndicator color={Colors.red}/> :  loginButton}
-                                    {/*<AuthButton 
-                                        IconSettings = {{
-                                            name: "notSet"
-                                        }}
-                                        style={{
-                                            backgroundColor: Colors.red,
-                                        }}
-                                        buttonText={"Login"}
-                                        textStyle={{ textAlign: "center", }}
-                                        onPress={loginHandler}
-                                    />*/}
                                     <AuthButton 
                                         IconSettings = {{
                                             name: "notSet"
