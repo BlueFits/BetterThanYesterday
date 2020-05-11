@@ -3,18 +3,24 @@ import { View, StyleSheet } from "react-native";
 import { HeaderText, DefaultText } from "../../../controllers/TextController";
 import { Bar } from "react-native-progress";
 import Colors from "../../../constants/Colors";
+//COMPONENTS
+import ProgressBar from "./ProgressBar";
+import PlusIndicator from "./PlusIndicator";
 
 const Header = ({ homeState, currentIndicatorText, currentTotalPoints, previousTotalPoints, currentTotalPercentage }) => {
+    const plusIndicatorValue = currentTotalPoints - previousTotalPoints;
     return (
         <View style={styles.header}>
             <HeaderText style={styles.headerText}>{homeState.header.toUpperCase()}'S ACHIEVEMENTS</HeaderText>
             <View style={styles.progressIndicator}>
                 <View style={styles.progressIndicatorTexts}>
                     {currentIndicatorText}
-                    <DefaultText>{currentTotalPoints}/{previousTotalPoints}</DefaultText>
+                    <DefaultText>
+                        {Math.sign(plusIndicatorValue) === 1 ? `+${Math.abs(plusIndicatorValue)}` : `${currentTotalPoints}/${previousTotalPoints}`}
+                    </DefaultText>
                 </View>
                 <View style={styles.progressBar}>
-                    <Bar progress={currentTotalPercentage} width={null} color={currentTotalPercentage > 1 ? Colors.primary : Colors.green}/>
+                    {currentTotalPercentage > 1 ? <PlusIndicator value={Math.abs(plusIndicatorValue)} /> : <ProgressBar currentTotalPercentage={currentTotalPercentage} />}
                 </View>
             </View>
         </View>

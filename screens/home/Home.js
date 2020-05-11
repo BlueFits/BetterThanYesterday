@@ -266,7 +266,7 @@ function percentageValidator(homeGoals, homeState) {
         return 0;
     }
     else if (currentPoints && (!previousPoints)) {
-        return currentPoints/20;
+        return currentPoints/1;
     }
     else if ((!currentPoints && previousPoints) || (currentPoints && previousPoints)) {
         return currentPoints/previousPoints;

@@ -120,7 +120,7 @@ const Register = ({ navigation }) => {
 
     return (
         <TouchableWithoutFeedback touchSoundDisabled={true} onPress={() => Keyboard.dismiss()}>
-            <ScrollView style={{ height: "100%" }}>
+            <ScrollView  keyboardShouldPersistTaps={"handled"} style={{ height: "100%" }}>
                 <KeyboardAvoidingView>
                         <View style={styles.screen}>
                                 <View style={styles.inputContianer}>
@@ -158,7 +158,7 @@ const Register = ({ navigation }) => {
                                             placeholder="Re-enter password" 
                                             style={{...styles.input, ...errState.rePassword.style}} 
                                             secureTextEntry={true} 
-                                            onSubmitEditing={() => Keyboard.dismiss()}
+                                            onSubmitEditing={registerHandler}
                                         />
                                         
                                         <SmallText style={styles.errorText}>{errState.rePassword.msg}</SmallText>

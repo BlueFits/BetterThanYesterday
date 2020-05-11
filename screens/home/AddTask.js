@@ -30,9 +30,13 @@ const AddTask = ({ navigation, route }) => {
     };
 
     function submitHandler() {
-        const currentDate = moment().format("MMMM Do YYYY");
-        dispatch(updateTask(goalId, stepId, capitalizeWords(task), currentDate));
-        navigation.navigate("Home");
+        if (task === null) {
+            Keyboard.dismiss();
+        } else {
+            const currentDate = moment().format("MMMM Do YYYY");
+            dispatch(updateTask(goalId, stepId, capitalizeWords(task), currentDate));
+            navigation.navigate("Home");
+        }
     };
     //dynamic options
     navigation.setOptions({
@@ -42,8 +46,9 @@ const AddTask = ({ navigation, route }) => {
         headerTitleStyle: {
             color: "#fff",
         },
-        title: selectedGoal.goalName + " / " + selectedStep.stepName,
+        title: selectedStep.stepName.length <= 15 ? `${selectedGoal.goalName} / ${selectedStep.stepName}`: `${selectedGoal.goalName} / ${selectedStep.stepName.substring(0, 15)}...`,
     });
+    
     return(
         <TouchableWithoutFeedback touchSoundDisabled={true} onPress={() => Keyboard.dismiss()}>
             <View style={styles.screen}>

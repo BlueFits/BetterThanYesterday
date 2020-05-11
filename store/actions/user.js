@@ -3,7 +3,7 @@ export const UPDATE_GOAL = "UPDATE_GOAL";
 export const UDPATE_STEP = "UPDATE_STEP";
 export const ADD_STEP = "ADD_STEP";
 export const UPDATE_TASK = "UPDATE_TASK";
-//For Debugging
+//USER UPDATES
 export const SET_USER = "SET_USER";
 //Server
 import ServerRoot from "../../config/serverConfig";
@@ -23,6 +23,7 @@ export const fetchUser = (USER_ID) => {
                     id: user._id,
                     email: user.email,
                     goals: user.goals,
+                    createdAt: user.createdAt
                 })
             }
         } catch (err) {

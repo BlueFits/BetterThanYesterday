@@ -1,0 +1,3 @@
+-----Bug Report-----
+  -Home
+  --page update is too slow//Try putting the render in a state

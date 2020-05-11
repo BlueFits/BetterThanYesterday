@@ -1,4 +1,4 @@
-import { AUTHENTICATE } from "../actions/auth";
+import { AUTHENTICATE, DELETE_ACCOUNT } from "../actions/auth";
 
 const initialState = {
     token: null,

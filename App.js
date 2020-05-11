@@ -40,22 +40,10 @@ function fetchFonts() {
   });
 };
 
-console.log(`
-  -----Bug Report-----
-  -Edit Goals 2
-  --deleting a step bug
-  -Home
-  --page update is too slow//Try putting the render in a state
-  --stack header at add Task is too long
-  --Long current indicator Text
-  --Completed step shows up in adding a log
-`);
-
 //Main Component
 export default function App() { 
   //Initialize States
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   if (!fontLoaded) {
     return <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />;

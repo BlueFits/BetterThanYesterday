@@ -33,7 +33,7 @@ function AddTasks({ navigation }) {
                             <GoalList 
                                 key={"KeyFor:"+goal+index}
                                 goalName={goal.goalName}
-                                stepsLength={goal.steps.length}
+                                stepsLength={goal.steps.filter(step => !step.isComplete ? true : false).length}
                                 startDate={goal.startDate}
                                 customStyles={{ backgroundColor: goal.goalColor }}
                                 onPress={chooseTaskHandler.bind(this, goal._id)}

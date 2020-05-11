@@ -20,6 +20,7 @@ export default function(state = { email: "init", goals: [] }, action) {
                 _id: action.id,
                 email: action.email,
                 goals: action.goals,
+                createdAt: moment(action.createdAt).format("MMMM Do YYYY"),
             }
         case ADD_GOAL:
             //logic to update to database and the state

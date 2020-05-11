@@ -19,7 +19,6 @@ export const DefaultTextItalic = (props) => {
     );
 };
 
-
 export const HeaderText = (props) => {
     return(
         <Text style={{fontFamily: "myriadBold", ...styles.headerText, ...props.style}}>{props.children}</Text>
@@ -29,6 +28,12 @@ export const HeaderText = (props) => {
 export const HeaderTextItalic = (props) => {
     return(
         <Text style={{fontFamily: "myriadBoldItalic", ...styles.headerText, ...props.style, fontSize: 20, }}>{props.children}</Text>
+    );
+};
+
+export const HeaderTextSemiBold = (props) => {
+    return (
+        <Text style={{fontFamily: "myriadSemiBold", ...styles.headerText, ...props.style, fontSize: 20, }}>{props.children}</Text>
     );
 };
 

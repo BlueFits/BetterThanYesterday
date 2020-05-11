@@ -59,9 +59,9 @@ const Goals = ({ navigation }) => {
                             <Swipeable 
                                 key={"GoalKey:"+index}
                                 rightActionActivationDistance={250}
-                                onRightActionRelease={deleteGoalHandler.bind(this, goal.id)}
+                                onRightActionRelease={deleteGoalHandler.bind(this, goal._id)}
                                 rightButtons={[
-                                    <TouchableOpacity onPress={deleteGoalHandler.bind(this, goal.id)}>
+                                    <TouchableOpacity onPress={deleteGoalHandler.bind(this, goal._id)}>
                                         <View style={styles.rightSwipeButton}>
                                             <View style={styles.rightSwipeIcon}>
                                                 <MaterialIcons name="delete" size={23} color="#fff"/>

@@ -114,6 +114,7 @@ const AddGoal = ({ navigation }) => {
                     </View>
                     <View style={styles.flatListContainer}>
                         <FlatList 
+                            keyboardShouldPersistTaps={"handled"}
                             data={GoalSuggestions} 
                             renderItem={suggestionsRenderHandler} 
                             keyExtractor={(data, index) => "key"+index }

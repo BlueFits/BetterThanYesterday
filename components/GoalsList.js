@@ -8,14 +8,16 @@ const GoalsList = ({ goalName, stepsLength, customStyles, startDate, onPress }) 
     return(
         <Touchable onPress={onPress}>
             <View style={styles.goalContainer}>
-                <View>
+                <View style={styles.goalContainerChildren}>
                     <View style={styles.goalTitleContainer}>
                         <View style={[styles.color, customStyles]}></View>
-                        <DefaultTextBold>{goalName}</DefaultTextBold>
+                        <View style={styles.goalName}>
+                            <DefaultTextBold style={{ flexGrow: 1, }}>{goalName}</DefaultTextBold>
+                        </View>
                     </View>
                     <SmallText>{stepsLength} Steps</SmallText>
                 </View>
-                <View>
+                <View style={{ ...styles.goalContainerChildren, alignItems: "flex-end" }}>
                     <SmallText>Start Date: {startDate}</SmallText>
                 </View>
             </View>
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#fff",
         height: 68,
+        width: "100%",
     },
     goalTitleContainer: {
         flexDirection: "row",
@@ -44,6 +47,10 @@ const styles = StyleSheet.create({
         backgroundColor: "red", 
         marginRight: 5 
     },
+    goalContainerChildren: { 
+        width: "50%" 
+    },
+    goalName : { width: "85%" },   
 });
 
 export default GoalsList;

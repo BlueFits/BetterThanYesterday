@@ -14,6 +14,40 @@ export const authenticate = (userId, token) => {
     };
 };
 
+export const deleteAccount = (USER_ID) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await fetch(Root  + "/users/delete", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + getState().authReducer.token,
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    USER_ID
+                }),
+            });
+
+            if (!response.ok) {
+                const errResData = await response.json();
+                throw new Error(errResData.error);
+            } else {
+                saveDataToStorage(null, null, new Date());
+                dispatch(authenticate(null, null));
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
+};
+
+export const signOut = () => {
+    return async dispatch => {
+        dispatch(authenticate(null, null));
+        saveDataToStorage(null, null, new Date());
+    };
+};
+
 export const login = (email, password) => {
     return async dispatch => {
         const response = await fetch(Root + "/users/login", {

@@ -43,15 +43,17 @@ const chooseStep = ({ navigation, route }) => {
 
         <View>
             {selectedGoal.steps.map((step ,index) => {
-                return(
-                    <View key={"keyFor:"+step+":"+index} style={styles.touchableContainer}>
-                        <Touchable onPress={chooseStepHandler.bind(this, step._id)}>
-                            <View style={{ paddingVertical: 20, }}>
-                                <DefaultTextBold>{step.stepName}</DefaultTextBold>
-                            </View>
-                        </Touchable>
-                    </View>
-                );
+                if (!step.isComplete) {
+                    return(
+                        <View key={"keyFor:"+step+":"+index} style={styles.touchableContainer}>
+                            <Touchable onPress={chooseStepHandler.bind(this, step._id)}>
+                                <View style={{ paddingVertical: 20, }}>
+                                    <DefaultTextBold>{step.stepName}</DefaultTextBold>
+                                </View>
+                            </Touchable>
+                        </View>
+                    );
+                }
             })}
         </View>
     </View>

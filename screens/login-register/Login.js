@@ -71,7 +71,7 @@ const Login = ({ navigation, route }) => {
 
     return (
         <TouchableWithoutFeedback touchSoundDisabled={true} onPress={() => Keyboard.dismiss()}>
-            <ScrollView style={{ height: "100%"}}>
+            <ScrollView keyboardShouldPersistTaps={"handled"} style={{ height: "100%"}}>
                 <KeyboardAvoidingView>
                         <View style={styles.screen}>
                                 <View style={styles.inputContianer}>
