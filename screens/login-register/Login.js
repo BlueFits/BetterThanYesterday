@@ -32,6 +32,7 @@ const Login = ({ navigation, route }) => {
     async function loginHandler() {
         setError(null);
         setPassword("");
+        Keyboard.dismiss();
         setIsLoading(true);
         try {
             await dispatch(login(email, password));

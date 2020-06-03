@@ -36,12 +36,6 @@ const GoalsStackNavigator = () => {
     );
 };
 
-/* 
-<Stack.Screen name="Goals" component={GoalsScreen} options={{
-    headerShown: true,
-}} />
-*/
-
 const defaultScreenOptions= {
     headerStyle: {
         elevation: 0,

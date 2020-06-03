@@ -57,7 +57,7 @@ const AddTask = ({ navigation, route }) => {
                         <Header2Text>Task</Header2Text>
                         <View>
                             <DefaultText>
-                                Be specific, after choosing a step, you wan to specify exactly
+                                Be specific, after choosing a step, you want to specify exactly
                                 what you did related to that step. For example, after choosing
                                 "Eating Healthy" in the previous page, you can write: "Breakfast
                                 ate was under 500 calories".

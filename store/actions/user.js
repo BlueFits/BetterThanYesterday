@@ -7,7 +7,7 @@ export const UPDATE_TASK = "UPDATE_TASK";
 export const SET_USER = "SET_USER";
 //Server
 import ServerRoot from "../../config/serverConfig";
-const Root = ServerRoot.development;
+const Root = ServerRoot.production;
 
 export const fetchUser = (USER_ID) => {
     return async dispatch => {

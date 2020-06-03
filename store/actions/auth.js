@@ -4,14 +4,44 @@ export const AUTHENTICATE = "AUTHENTICATE";
 
 //Server
 import ServerRoot from "../../config/serverConfig";
-const Root = ServerRoot.development;
+const Root = ServerRoot.production;
 
 export const authenticate = (userId, token) => {
-    return {
-        type: AUTHENTICATE,
-        userId,
-        token,
-    };
+    return async (dispatch, getState) => {
+        try {
+            if (userId && token) {
+                const response = await fetch(Root + "/users/addLog", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + getState().authReducer.token,
+                        "Content-Type" : "application/json",
+                    },
+                    body: JSON.stringify({
+                        userId,
+                    }),
+                });
+                
+                if (!response.ok) {
+                    const errData = response.json();
+                    throw new Error(errData.error);
+                } else {
+                    dispatch({
+                        type: AUTHENTICATE,
+                        userId,
+                        token,
+                    })
+                }
+            } else {
+                dispatch({
+                    type: AUTHENTICATE,
+                    userId,
+                    token,
+                })
+            }
+        } catch (err) {
+            throw err;
+        }
+    }
 };
 
 export const deleteAccount = (USER_ID) => {

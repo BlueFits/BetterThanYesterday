@@ -1,8 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { HeaderText, DefaultText } from "../../../controllers/TextController";
-import { Bar } from "react-native-progress";
-import Colors from "../../../constants/Colors";
 //COMPONENTS
 import ProgressBar from "./ProgressBar";
 import PlusIndicator from "./PlusIndicator";
@@ -45,10 +43,10 @@ const styles = StyleSheet.create({
     progressIndicatorTexts: {
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: progressSpacing,
+        marginVertical: progressSpacing,
     },
     progressBar: {
-        padding: progressSpacing,
+        marginTop: progressSpacing,
     },
 
 });

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import validator from "validator";
 import { useDispatch } from "react-redux";
-import { signup } from "../../store/actions/auth";
+
 //CONSTANTS
 import Colors from "../../constants/Colors";
 //COMPONENTS
@@ -19,7 +19,7 @@ import AuthButton from "../../components/authentication/AuthButton";
 import { SmallText } from "../../controllers/TextController";
 //Server
 import ServerRoot from "../../config/serverConfig";
-const Root = ServerRoot.development;
+const Root = ServerRoot.production;
 
 const Register = ({ navigation }) => {
     //Initialize
@@ -86,12 +86,8 @@ const Register = ({ navigation }) => {
         }
 
         if (errState.email.msg === " " && errState.password.msg === " " && errState.rePassword.msg === " ") {
-            /*
-            dispatch(signup(email, password, rePassword));
-            navigation.navigate("login", { email });
-            */
-            //No more errors proceed
             setIsLoading(true);
+            
             const response = await fetch(Root + "/users/register", {
                 method: "POST",
                 headers: {
@@ -100,7 +96,7 @@ const Register = ({ navigation }) => {
                 body: JSON.stringify({
                     email,
                     password, 
-                    rePassword
+                    rePassword,
                 }),
             });
 
@@ -112,7 +108,7 @@ const Register = ({ navigation }) => {
                 errStateCopy.email.style = { borderColor: "red" };
             } else {
                 navigation.navigate("login", { email });
-            }            
+            }       
         }
 
         setErrState(errStateCopy);
