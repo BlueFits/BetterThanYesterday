@@ -98,7 +98,7 @@ export const login = (email, password) => {
             const resData = await response.json();
                 
             dispatch(authenticate(resData.userId, resData.token));
-            const expiresIn = new Date(new Date().getTime() + 43200 * 1000);
+            const expiresIn = new Date(new Date().getTime() + 86400 * 1000);
             saveDataToStorage(resData.token, resData.userId, expiresIn);
         }    
     };
